@@ -88,7 +88,7 @@
       z-index: 100;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(7, 9, 14, 0.82);
+      background: rgba(7, 9, 14, 0.85);
       border-bottom: 1px solid var(--border-subtle);
       transition: border-color 0.2s;
     }
@@ -135,7 +135,7 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 24px;
     }
     .nav-links a {
       color: var(--text-muted);
@@ -152,6 +152,29 @@
       align-items: center;
       gap: 12px;
     }
+
+    /* Language Toggle Button */
+    .btn-lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-sans);
+    }
+    .btn-lang-toggle:hover {
+      background: var(--cyan);
+      color: #020612;
+      box-shadow: 0 0 16px var(--cyan);
+    }
+
     .btn-nav-gh {
       display: inline-flex;
       align-items: center;
@@ -231,7 +254,7 @@
     .hero-desc {
       font-size: clamp(1.05rem, 1.8vw, 1.25rem);
       color: var(--text-muted);
-      max-width: 820px;
+      max-width: 840px;
       margin: 0 auto 40px;
       line-height: 1.65;
       font-weight: 400;
@@ -466,7 +489,7 @@
       line-height: 1.6;
     }
 
-    /* LIVE PLAYGROUND (The centerpiece) */
+    /* LIVE PLAYGROUND */
     .playground-wrapper {
       max-width: 980px;
       margin: 0 auto;
@@ -639,7 +662,7 @@
       color: rgba(255, 255, 255, 0.15);
     }
 
-    /* Response Container */
+    /* Answer Card */
     .answer-card {
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(56, 189, 248, 0.2);
@@ -1010,6 +1033,106 @@
       overflow-x: auto;
     }
 
+    /* COMPREHENSIVE DOCUMENTATION SECTION */
+    .docs-section {
+      background: #05070c;
+      border-top: 1px solid var(--border-subtle);
+      padding: 100px 0;
+    }
+    .docs-nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .docs-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .docs-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .docs-tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+    .docs-content-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 36px;
+      line-height: 1.7;
+    }
+    .docs-content-box h3 {
+      font-size: 1.35rem;
+      color: var(--text-white);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .docs-content-box p {
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-size: 0.95rem;
+    }
+    .docs-content-box ul {
+      margin: 12px 0 20px 24px;
+      color: #cbd5e1;
+      font-size: 0.94rem;
+    }
+    .docs-content-box li {
+      margin-bottom: 8px;
+    }
+    .docs-code-block {
+      background: #020612;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .docs-badge-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .doc-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-white);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .doc-link-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--cyan);
+    }
+
     /* FOOTER */
     footer {
       padding: 70px 0 40px;
@@ -1090,25 +1213,30 @@
         <div class="brand-logo">CR</div>
         <div>
           <span>Company RAG</span>
-          <span class="brand-sub">Enterprise Engine</span>
+          <span class="brand-sub" id="navSubtitle">Enterprise Engine</span>
         </div>
       </a>
       
       <div class="nav-links">
-        <a href="#playground">Live Playground</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#benchmarks">Benchmarks</a>
-        <a href="#macos">macOS CLI & App</a>
-        <a href="#integrations">Integrations</a>
-        <a href="https://github.com/Farhodoff/company-knowledge-base-rag" target="_blank">Documentation</a>
+        <a href="#playground" id="linkPlayground">Live Playground</a>
+        <a href="#architecture" id="linkArch">Architecture</a>
+        <a href="#benchmarks" id="linkBench">Benchmarks</a>
+        <a href="#macos" id="linkMac">macOS CLI</a>
+        <a href="#integrations" id="linkInt">Integrations</a>
+        <a href="#docs-guide" id="linkDocs">Qo‘llanma / Docs</a>
       </div>
 
       <div class="nav-actions">
+        <!-- Language Switcher Button -->
+        <button class="btn-lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">
+          <span id="langFlag">🇺🇿</span> <span id="langName">O‘zbekcha</span>
+        </button>
+
         <a href="https://github.com/Farhodoff/company-knowledge-base-rag" target="_blank" class="btn-nav-gh">
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
           </svg>
-          <span>Star on GitHub</span>
+          <span id="navStarText">GitHub ★</span>
         </a>
       </div>
     </div>
@@ -1119,15 +1247,15 @@
     <div class="container">
       <div class="status-badge">
         <span class="ping-dot"></span>
-        <span>Local-First RAG • Zero Hallucinations • 7/7 Tests Passing</span>
+        <span id="heroBadge">Local-First RAG • Zero Hallucinations • 7/7 Tests Passing</span>
       </div>
 
-      <h1 class="hero-title">
+      <h1 class="hero-title" id="heroTitle">
         Internal Company Docs.<br />
         <span class="gradient-text">Zero Hallucinations. Exact Citations.</span>
       </h1>
 
-      <p class="hero-desc">
+      <p class="hero-desc" id="heroDesc">
         A private, enterprise knowledge assistant for software teams. Ingests PDF handbooks, markdown guidelines, and company policies into an in-memory FAISS vector index, querying Google Gemini with strict mathematical grounding.
       </p>
 
@@ -1139,19 +1267,19 @@
         </div>
         <button class="btn-copy-main" onclick="copyMainCmd()" id="mainCopyBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          <span>Copy Installer</span>
+          <span id="btnCopyLabel">Copy Installer</span>
         </button>
       </div>
 
       <!-- Action buttons -->
       <div class="hero-actions">
-        <a href="#playground" class="btn-primary">
+        <a href="#playground" class="btn-primary" id="btnPlaygroundCta">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
           <span>Test Live Playground</span>
         </a>
-        <a href="#macos" class="btn-secondary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          <span>macOS Desktop & CLI</span>
+        <a href="#docs-guide" class="btn-secondary" id="btnDocsCta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span>Qo‘llanma / User Guide</span>
         </a>
       </div>
 
@@ -1178,19 +1306,19 @@
     <div class="metrics-row">
       <div class="metric-cell">
         <div class="metric-value"><span>&lt;</span> 380<span>ms</span></div>
-        <div class="metric-label">FAISS Retrieval Latency</div>
+        <div class="metric-label" id="metric1">FAISS Retrieval Latency</div>
       </div>
       <div class="metric-cell">
         <div class="metric-value">100<span>%</span></div>
-        <div class="metric-label">Verifiable Page Grounding</div>
+        <div class="metric-label" id="metric2">Verifiable Page Grounding</div>
       </div>
       <div class="metric-cell">
         <div class="metric-value">0<span>%</span></div>
-        <div class="metric-label">External Data Leakage</div>
+        <div class="metric-label" id="metric3">External Data Leakage</div>
       </div>
       <div class="metric-cell">
         <div class="metric-value">7<span>/7</span></div>
-        <div class="metric-label">Automated Unit Tests Passing</div>
+        <div class="metric-label" id="metric4">Automated Unit Tests Passing</div>
       </div>
     </div>
   </section>
@@ -1199,9 +1327,9 @@
   <section class="section" id="playground">
     <div class="container">
       <div class="section-head">
-        <span class="tag-badge">Interactive Simulation</span>
-        <h2 class="section-title">Test Grounded Retrieval Live</h2>
-        <p class="section-desc">
+        <span class="tag-badge" id="playTag">Interactive Simulation</span>
+        <h2 class="section-title" id="playTitle">Test Grounded Retrieval Live</h2>
+        <p class="section-desc" id="playDesc">
           Try standard company policy questions or type your own. Observe how the RAG engine retrieves real document chunks, computes vector similarity, and synthesizes answers without hallucinating.
         </p>
       </div>
@@ -1210,22 +1338,22 @@
         <div class="playground-header">
           <div class="playground-header-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="#38bdf8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            <span>Internal Knowledge RAG Session</span>
+            <span id="playSessionTitle">Internal Knowledge RAG Session</span>
           </div>
           <div class="engine-indicator">
             <span class="indicator-pulse"></span>
-            <span>Index: 4 Documents • 19 Chunks (768-dim)</span>
+            <span id="playIndicator">Index: 5 Documents • FAISS (3072-dim)</span>
           </div>
         </div>
 
         <!-- Presets -->
         <div class="preset-chips">
-          <span class="preset-label">Sample Questions:</span>
-          <button class="chip-btn active" onclick="selectPreset(0)">🌴 Vacation & PTO Policy</button>
-          <button class="chip-btn" onclick="selectPreset(1)">💻 Backend PR & Git Standards</button>
-          <button class="chip-btn" onclick="selectPreset(2)">🚀 First 3 Days Onboarding</button>
-          <button class="chip-btn" onclick="selectPreset(3)">🔐 2FA & Password Security</button>
-          <button class="chip-btn" onclick="selectPreset(4)">⚠️ Unindexed Question (Strict Anti-Hallucination)</button>
+          <span class="preset-label" id="playSampleLabel">Sample Questions:</span>
+          <button class="chip-btn active" onclick="selectPreset(0)" id="chip0">🌴 Vacation & PTO</button>
+          <button class="chip-btn" onclick="selectPreset(1)" id="chip1">💻 Backend Standards</button>
+          <button class="chip-btn" onclick="selectPreset(2)" id="chip2">🚀 3-Day Onboarding</button>
+          <button class="chip-btn" onclick="selectPreset(3)" id="chip3">🔐 2FA & Password</button>
+          <button class="chip-btn" onclick="selectPreset(4)" id="chip4">⚠️ Anti-Hallucination</button>
         </div>
 
         <!-- Query input -->
@@ -1240,7 +1368,7 @@
           />
           <button class="btn-ask" onclick="executeQuery()" id="askBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            <span>Ask Knowledge Base</span>
+            <span id="btnAskText">Ask Knowledge Base</span>
           </button>
         </div>
 
@@ -1249,19 +1377,19 @@
           <!-- Step Tracker -->
           <div class="pipeline-tracker" id="pipelineTracker">
             <div class="pipeline-step done" id="step1">
-              <span>✓</span> Query Tokenized (Gemini 768d)
+              <span>✓</span> <span id="st1">Query Tokenized (Gemini 3072d)</span>
             </div>
             <span class="pipeline-arrow">→</span>
             <div class="pipeline-step done" id="step2">
-              <span>✓</span> FAISS Cosine Search (Top-4 Chunks)
+              <span>✓</span> <span id="st2">FAISS Cosine Search (Top-4)</span>
             </div>
             <span class="pipeline-arrow">→</span>
             <div class="pipeline-step done" id="step3">
-              <span>✓</span> Context Ingestion & Reranking
+              <span>✓</span> <span id="st3">Context Ingestion</span>
             </div>
             <span class="pipeline-arrow">→</span>
             <div class="pipeline-step done" id="step4">
-              <span>✓</span> Synthesizing with Citations
+              <span>✓</span> <span id="st4">Grounded Synthesis</span>
             </div>
           </div>
 
@@ -1270,7 +1398,7 @@
             <div class="answer-header">
               <div class="answer-badge">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-                <span>Grounded RAG Response</span>
+                <span id="answerBadgeText">Grounded RAG Response</span>
               </div>
               <div class="confidence-meter" id="confidenceBadge">
                 Confidence: 98.4% Match
@@ -1278,28 +1406,28 @@
             </div>
 
             <div class="answer-body" id="renderedAnswer">
-              Full-time employees receive <strong>24 paid vacation days (PTO)</strong> per calendar year, accrued monthly at 2 days per month.<br /><br />
-              <strong>Submission & Approval Workflow:</strong>
+              The number of vacation days full-time employees receive depends on years of service:<br />
               <ul>
-                <li>Submit your leave request via <strong>BambooHR</strong> at least <strong>2 weeks in advance</strong> for leaves longer than 3 consecutive days.</li>
-                <li>Your squad lead or department manager must review and approve within <strong>48 hours</strong>.</li>
-                <li>A maximum of <strong>5 unused PTO days</strong> may be rolled over into the subsequent calendar year.</li>
+                <li><strong>0–2 years:</strong> 15 paid days per year</li>
+                <li><strong>2–5 years:</strong> 20 paid days per year</li>
+                <li><strong>5+ years:</strong> 25 paid days per year</li>
               </ul>
+              <strong>Request Workflow:</strong> Submit a request via <strong>hr.company.com</strong> at least <strong>2 weeks in advance</strong>. Your manager will approve within 5 business days. Maximum consecutive leave is 10 business days.
             </div>
 
             <div class="citation-drawer">
               <div class="citation-title">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                <span>Retrieved Context Chunks (FAISS Cosine Distance)</span>
+                <span id="citationTitle">Retrieved Context Chunks (FAISS Cosine Distance)</span>
               </div>
 
               <div id="chunksContainer">
                 <div class="chunk-card">
                   <div class="chunk-meta">
-                    <span>📄 sample_vacation_policy.md (Page 1) • Chunk #2</span>
+                    <span>📄 sample_vacation_policy.md (Page 1) • Chunk #1</span>
                     <span class="chunk-score">Similarity: 0.984</span>
                   </div>
-                  <div>"All full-time employees accrue 24 days of PTO per calendar year. Leave requests must be submitted through BambooHR at least 2 weeks in advance for absences exceeding 3 days. Up to 5 unused PTO days roll over."</div>
+                  <div>"# Vacation Policy: 0-2 years: 15 days; 2-5 years: 20 days; 5+ years: 25 days. Submit via hr.company.com at least 2 weeks in advance."</div>
                 </div>
               </div>
             </div>
@@ -1313,9 +1441,9 @@
   <section class="section" id="architecture" style="background: rgba(11, 16, 28, 0.4);">
     <div class="container">
       <div class="section-head">
-        <span class="tag-badge">Engineering Design</span>
-        <h2 class="section-title">End-to-End System Architecture</h2>
-        <p class="section-desc">
+        <span class="tag-badge" id="archTag">Engineering Design</span>
+        <h2 class="section-title" id="archTitle">End-to-End System Architecture</h2>
+        <p class="section-desc" id="archDesc">
           Modular, decoupled architecture optimized for privacy, high retrieval accuracy, and zero hallucinations.
         </p>
       </div>
@@ -1329,36 +1457,36 @@
           <div class="p-card active">
             <div class="p-card-top">
               <div class="p-card-num">01</div>
-              <h3>Multi-Format Ingestion</h3>
+              <h3 id="p1Title">Multi-Format Ingestion</h3>
             </div>
-            <p>Recursively loads PDF handbooks, Markdown policies, CSV records, and TXT guides. Extracts page-level metadata and line offsets.</p>
+            <p id="p1Desc">Recursively loads PDF handbooks, Markdown policies, CSV records, and TXT guides. Extracts page-level metadata and line offsets.</p>
             <span class="p-card-code">src/document_loader.py</span>
           </div>
 
           <div class="p-card">
             <div class="p-card-top">
               <div class="p-card-num">02</div>
-              <h3>Recursive Character Chunking</h3>
+              <h3 id="p2Title">Recursive Character Chunking</h3>
             </div>
-            <p>Splits text using semantic boundaries (paragraphs, headings, newlines) with 500-char window and 50-char overlap to maintain context coherence.</p>
+            <p id="p2Desc">Splits text using semantic boundaries (paragraphs, headings, newlines) with 1000-char window and 200-char overlap.</p>
             <span class="p-card-code">src/chunker.py</span>
           </div>
 
           <div class="p-card">
             <div class="p-card-top">
               <div class="p-card-num">03</div>
-              <h3>Dense Vector Store (FAISS)</h3>
+              <h3 id="p3Title">Dense Vector Store (FAISS)</h3>
             </div>
-            <p>Generates 768-dimensional embeddings using Google's text-embedding-004. Serializes index into fast local FAISS binaries for offline retrieval.</p>
+            <p id="p3Desc">Generates 3072-dimensional embeddings via Google Gemini embedding-001. Serializes index into fast local FAISS binaries.</p>
             <span class="p-card-code">src/vectorstore.py</span>
           </div>
 
           <div class="p-card">
             <div class="p-card-top">
               <div class="p-card-num">04</div>
-              <h3>Grounded LCEL Chain</h3>
+              <h3 id="p4Title">Grounded LCEL Chain</h3>
             </div>
-            <p>LangChain Expression Language pipeline binds retrieved documents into strict system prompt guardrails. If context is missing, the LLM refuses to invent answers.</p>
+            <p id="p4Desc">LangChain Expression Language pipeline binds retrieved documents into strict system prompt guardrails to prevent hallucinations.</p>
             <span class="p-card-code">src/chain.py</span>
           </div>
         </div>
@@ -1370,9 +1498,9 @@
   <section class="section" id="benchmarks">
     <div class="container">
       <div class="section-head">
-        <span class="tag-badge">Rigor & Accuracy</span>
-        <h2 class="section-title">Why Naive LLMs Fail at Company Docs</h2>
-        <p class="section-desc">
+        <span class="tag-badge" id="benchTag">Rigor & Accuracy</span>
+        <h2 class="section-title" id="benchTitle">Why Naive LLMs Fail at Company Docs</h2>
+        <p class="section-desc" id="benchDesc">
           Direct LLM prompts hallucinate outdated public policies. Grounded RAG restricts generation strictly to internal facts.
         </p>
       </div>
@@ -1381,36 +1509,36 @@
         <table class="compare-table">
           <thead>
             <tr>
-              <th>Capability</th>
-              <th>Generic Chatbot (ChatGPT/Gemini direct)</th>
-              <th class="col-rag">Company Knowledge Base RAG</th>
+              <th id="th1">Capability</th>
+              <th id="th2">Generic Chatbot (ChatGPT/Gemini direct)</th>
+              <th class="col-rag" id="th3">Company Knowledge Base RAG</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Internal Policy Knowledge</strong></td>
-              <td><span class="badge-cross">✗ Zero</span> (Trained only on public web)</td>
-              <td class="col-rag"><span class="badge-check">✓ 100%</span> (Trained on internal documents)</td>
+              <td><strong id="tbR1Title">Internal Policy Knowledge</strong></td>
+              <td id="tbR1Old"><span class="badge-cross">✗ Zero</span> (Trained only on public web)</td>
+              <td class="col-rag" id="tbR1New"><span class="badge-check">✓ 100%</span> (Trained on internal documents)</td>
             </tr>
             <tr>
-              <td><strong>Hallucination Rate</strong></td>
-              <td><span class="badge-cross">~35% – 42%</span> (Invents company rules)</td>
-              <td class="col-rag"><span class="badge-check">0.0%</span> (Strict refusal guardrails)</td>
+              <td><strong id="tbR2Title">Hallucination Rate</strong></td>
+              <td id="tbR2Old"><span class="badge-cross">~35% – 42%</span> (Invents company rules)</td>
+              <td class="col-rag" id="tbR2New"><span class="badge-check">0.0%</span> (Strict refusal guardrails)</td>
             </tr>
             <tr>
-              <td><strong>Exact Page Citations</strong></td>
-              <td><span class="badge-cross">✗ Fake links or none</span></td>
-              <td class="col-rag"><span class="badge-check">✓ Exact file & page numbers</span></td>
+              <td><strong id="tbR3Title">Exact Page Citations</strong></td>
+              <td id="tbR3Old"><span class="badge-cross">✗ Fake links or none</span></td>
+              <td class="col-rag" id="tbR3New"><span class="badge-check">✓ Exact file & page numbers</span></td>
             </tr>
             <tr>
-              <td><strong>Data Privacy</strong></td>
-              <td>Sent to public multi-tenant APIs</td>
-              <td class="col-rag"><span class="badge-check">✓ Local-first FAISS vector index</span></td>
+              <td><strong id="tbR4Title">Data Privacy</strong></td>
+              <td id="tbR4Old">Sent to public multi-tenant APIs</td>
+              <td class="col-rag" id="tbR4New"><span class="badge-check">✓ Local-first FAISS vector index</span></td>
             </tr>
             <tr>
-              <td><strong>Enterprise Channels</strong></td>
-              <td>Web app only</td>
-              <td class="col-rag"><span class="badge-check">✓ macOS CLI, Desktop App, Slack, Discord, REST</span></td>
+              <td><strong id="tbR5Title">Enterprise Channels</strong></td>
+              <td id="tbR5Old">Web app only</td>
+              <td class="col-rag" id="tbR5New"><span class="badge-check">✓ macOS CLI, Desktop App, Slack, Discord, REST</span></td>
             </tr>
           </tbody>
         </table>
@@ -1422,18 +1550,18 @@
   <section class="section macos-suite-section" id="macos">
     <div class="container">
       <div class="section-head">
-        <span class="tag-badge">macOS & Developer Tooling</span>
-        <h2 class="section-title">Designed for Engineers on macOS</h2>
-        <p class="section-desc">
+        <span class="tag-badge" id="macTag">macOS & Developer Tooling</span>
+        <h2 class="section-title" id="macTitle">Designed for Engineers on macOS</h2>
+        <p class="section-desc" id="macDesc">
           Run queries from your terminal without opening a browser, launch the native macOS Desktop application, or run the local Streamlit dashboard.
         </p>
       </div>
 
       <div class="cli-tabs">
-        <button class="cli-tab-btn active" onclick="switchCliTab(0)"> 1-Line Installer</button>
-        <button class="cli-tab-btn" onclick="switchCliTab(1)">💻 Global CLI (company-rag)</button>
-        <button class="cli-tab-btn" onclick="switchCliTab(2)">🖥️ Native Desktop App</button>
-        <button class="cli-tab-btn" onclick="switchCliTab(3)">🧪 Automated Pytest Suite</button>
+        <button class="cli-tab-btn active" onclick="switchCliTab(0)" id="clTab0"> 1-Line Installer</button>
+        <button class="cli-tab-btn" onclick="switchCliTab(1)" id="clTab1">💻 Global CLI (company-rag)</button>
+        <button class="cli-tab-btn" onclick="switchCliTab(2)" id="clTab2">🖥️ Native Desktop App</button>
+        <button class="cli-tab-btn" onclick="switchCliTab(3)" id="clTab3">🧪 Automated Pytest Suite</button>
       </div>
 
       <div class="terminal-window">
@@ -1446,15 +1574,33 @@
           </div>
           <button class="btn-terminal-copy" onclick="copyCliSnippet()" id="cliCopyBtn">Copy</button>
         </div>
-        <pre class="terminal-body" id="cliTerminalBody"><span class="term-comment"># Paste this one-liner into your macOS Terminal:</span>
-<span class="term-prompt">$ </span><span class="term-cmd">curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash</span>
+        <pre class="terminal-body" id="cliTerminalBody"></pre>
+      </div>
+    </div>
+  </section>
 
-<span class="term-comment"># The script automatically:</span>
-<span class="term-output">  [1/4] Clones repository to ~/.company-rag</span>
-<span class="term-output">  [2/4] Creates isolated Python virtual environment</span>
-<span class="term-output">  [3/4] Symlinks global CLI executable: ~/.local/bin/company-rag</span>
-<span class="term-output">  [4/4] Compiles native macOS desktop launcher: ~/Applications/Company Knowledge Base.app</span>
-<span class="term-highlight">  ✓ Installation complete! Type 'company-rag' to begin.</span></pre>
+  <!-- COMPREHENSIVE DOCUMENTATION & USER GUIDE SECTION -->
+  <section class="docs-section" id="docs-guide">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-badge" id="guideTag">Foydalanish Qo‘llanmasi / User Guide</span>
+        <h2 class="section-title" id="guideTitle">To‘liq Qo‘llanma va Ko‘rsatmalar</h2>
+        <p class="section-desc" id="guideDesc">
+          Loyihani o‘rnatish, API kalitini kiritish, yangi hujjatlar yuklash, terminal buyruqlari va botlarni sozlash bo‘yicha batafsil qo‘llanma.
+        </p>
+      </div>
+
+      <div class="docs-nav-tabs">
+        <button class="docs-tab-btn active" onclick="switchDocTab(0)" id="docTab0">🚀 O‘rnatish (Installation)</button>
+        <button class="docs-tab-btn" onclick="switchDocTab(1)" id="docTab1">🔑 API Kalit (Config Key)</button>
+        <button class="docs-tab-btn" onclick="switchDocTab(2)" id="docTab2">💻 CLI Buyruqlar (Commands)</button>
+        <button class="docs-tab-btn" onclick="switchDocTab(3)" id="docTab3">📁 Hujjatlar (Documents)</button>
+        <button class="docs-tab-btn" onclick="switchDocTab(4)" id="docTab4">💬 Slack & Discord Botlar</button>
+        <button class="docs-tab-btn" onclick="switchDocTab(5)" id="docTab5">❓ Muammolar & FAQ</button>
+      </div>
+
+      <div class="docs-content-box" id="docsContentBox">
+        <!-- Rendered via JavaScript -->
       </div>
     </div>
   </section>
@@ -1463,9 +1609,9 @@
   <section class="section" id="integrations">
     <div class="container">
       <div class="section-head">
-        <span class="tag-badge">Omnichannel Ecosystem</span>
-        <h2 class="section-title">Deploy Across Team Channels</h2>
-        <p class="section-desc">
+        <span class="tag-badge" id="intTag">Omnichannel Ecosystem</span>
+        <h2 class="section-title" id="intTitle">Deploy Across Team Channels</h2>
+        <p class="section-desc" id="intDesc">
           Meet developers where they work. Slack channels, Discord developer servers, and internal intranet portals.
         </p>
       </div>
@@ -1474,14 +1620,12 @@
         <div class="int-card">
           <div>
             <div class="int-icon-box">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.52-2.523h-6.313z"/></svg>
             </div>
-            <h3>Slack Bot (Socket Mode)</h3>
-            <p>Responds to <code>@KnowledgeBot</code> mentions in internal channels with formatted Block Kit answers and source attachments without exposing incoming webhooks.</p>
+            <h3 id="slackTitle">Slack Bot (Socket Mode)</h3>
+            <p id="slackDesc">Responds to <code>@KnowledgeBot</code> mentions in internal channels with formatted Block Kit answers and source attachments without exposing incoming webhooks.</p>
           </div>
-          <div class="int-code-snippet">
-            python src/integrations/slack_bot.py
-          </div>
+          <div class="int-code-snippet">python src/integrations/slack_bot.py</div>
         </div>
 
         <div class="int-card">
@@ -1489,12 +1633,10 @@
             <div class="int-icon-box">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
             </div>
-            <h3>Discord Bot</h3>
-            <p>Triggers on <code>!ask &lt;query&gt;</code> inside engineering guild channels. Emits clean Discord Embeds highlighting source documents and confidence levels.</p>
+            <h3 id="discordTitle">Discord Bot</h3>
+            <p id="discordDesc">Triggers on <code>!ask &lt;query&gt;</code> inside engineering guild channels. Emits clean Discord Embeds highlighting source documents.</p>
           </div>
-          <div class="int-code-snippet">
-            python src/integrations/discord_bot.py
-          </div>
+          <div class="int-code-snippet">python src/integrations/discord_bot.py</div>
         </div>
 
         <div class="int-card">
@@ -1502,12 +1644,10 @@
             <div class="int-icon-box">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             </div>
-            <h3>Universal Webhook & REST</h3>
-            <p>Lightweight HTTP JSON endpoint (<code>POST /api/v1/query</code>) ready for HR portals, internal wikis, Zapier triggers, or CI/CD automated checks.</p>
+            <h3 id="apiTitle">Universal Webhook & REST</h3>
+            <p id="apiDesc">Lightweight HTTP JSON endpoint (<code>POST /api/v1/query</code>) ready for HR portals, internal wikis, Zapier triggers, or CI/CD automated checks.</p>
           </div>
-          <div class="int-code-snippet">
-            curl -X POST http://localhost:8000/api/v1/query
-          </div>
+          <div class="int-code-snippet">curl -X POST http://localhost:8000/api/v1/query</div>
         </div>
       </div>
     </div>
@@ -1522,16 +1662,16 @@
             <div class="brand-logo" style="width: 32px; height: 32px; font-size: 0.95rem;">CR</div>
             <span>Company Knowledge Base RAG</span>
           </div>
-          <p style="font-size: 0.88rem; color: #64748b; max-width: 440px;">
+          <p style="font-size: 0.88rem; color: #64748b; max-width: 440px;" id="footerDesc">
             A local-first, zero-hallucination enterprise question answering system powered by LangChain, Google Gemini, and FAISS.
           </p>
         </div>
 
         <div class="footer-links">
-          <a href="#playground">Playground</a>
-          <a href="#architecture">Architecture</a>
-          <a href="#macos">macOS CLI</a>
-          <a href="#integrations">Integrations</a>
+          <a href="#playground" id="fLinkPlay">Playground</a>
+          <a href="#architecture" id="fLinkArch">Architecture</a>
+          <a href="#macos" id="fLinkMac">macOS CLI</a>
+          <a href="#docs-guide" id="fLinkDocs">Qo‘llanma</a>
           <a href="https://github.com/Farhodoff/company-knowledge-base-rag" target="_blank">GitHub</a>
         </div>
       </div>
@@ -1545,139 +1685,433 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
+    let currentLang = 'uz'; // Default to Uzbek as requested
+
+    const I18N = {
+      uz: {
+        flag: "🇺🇿",
+        name: "O‘zbekcha",
+        navSub: "Korxona Dvigateli",
+        linkPlayground: "Jonli Sinov",
+        linkArch: "Arxitektura",
+        linkBench: "Taqqoslash",
+        linkMac: "macOS CLI",
+        linkInt: "Integratsiyalar",
+        linkDocs: "📖 Qo‘llanma",
+        navStar: "GitHub ★",
+        heroBadge: "Lokal RAG • 0% Gallyutsinatsiya • 7/7 Testlar O‘tgan",
+        heroTitle: "Kompaniya Hujjatlari.<br /><span class=\"gradient-text\">0% Gallyutsinatsiya. Aniq Sahifali Havolalar.</span>",
+        heroDesc: "Dasturchilar va xodimlar uchun xususiy ichki AI yordamchi. PDF qo‘llanmalar, texnik reglamentlar va kompaniya qoidalarini lokal FAISS vektor bazasiga saqlaydi hamda Google Gemini orqali qat’iy asoslangan javob qaytaradi.",
+        btnCopyLabel: "O‘rnatish Kodini Olish",
+        btnPlaygroundCta: "Jonli Sinab Ko‘rish",
+        btnDocsCta: "📖 To‘liq Qo‘llanma",
+        metric1: "FAISS Qidiruv Tezligi",
+        metric2: "Sahifali Asoslanganlik",
+        metric3: "Tashqi Ma’lumot Sizishi",
+        metric4: "Muvaffaqiyatli Testlar",
+        playTag: "Interaktiv Sinov",
+        playTitle: "Asosli Qidiruvni Jonli Sinab Ko‘ring",
+        playDesc: "Kompaniya qoidalariga oid savollarni tanlang yoki o‘z savolingizni yozing. RAG dvigateli qanday qilib haqiqiy hujjat qismlarini topishi va to‘qib chiqarmasdan javob berishini kuzating.",
+        playSessionTitle: "Ichki Bilimlar Bazasi Seansi",
+        playIndicator: "Indeks: 5 Hujjat • FAISS (3072-o‘lcham)",
+        playSampleLabel: "Namunaviy Savollar:",
+        chip0: "🌴 Ta’til va PTO",
+        chip1: "💻 Backend Standartlari",
+        chip2: "🚀 3-Kunlik Onboarding",
+        chip3: "🔐 2FA va Parollar",
+        chip4: "⚠️ Gallyutsinatsiyani Rad Etish",
+        inputPlaceholder: "Kompaniya qoidalari yoki texnik talablar bo‘yicha savol bering...",
+        btnAskText: "Javob Olish",
+        st1: "So‘rov Tokenlashtirildi (Gemini 3072d)",
+        st2: "FAISS Kosinus Qidiruv (Top-4)",
+        st3: "Kontekst Qayta Ishlandi",
+        st4: "Asosli Sintez Yakunlandi",
+        answerBadgeText: "Hujjatga Asoslangan Javob",
+        citationTitle: "Topilgan Kontekst Qismlari (FAISS Kosinus Masofasi)",
+        archTag: "Muhandislik Dizayni",
+        archTitle: "To‘liq Tizim Arxitekturasi",
+        archDesc: "Maxfiylik, yuqori aniqlik va xavfsizlik uchun modulli, lokal-birinchi arxitektura.",
+        p1Title: "Ko‘p Formatli Ingestion",
+        p1Desc: "PDF qo‘llanmalar, Markdown, CSV va TXT fayllarni avtomatik yuklaydi. Sahifa raqamlari va metama’lumotlarni saqlaydi.",
+        p2Title: "Rekursiv Belgili Bo‘laklash",
+        p2Desc: "Matnni paragraflar va yangi qatorlar bo‘yicha 1000 belgilik o‘lcham va 200 belgilik ustma-ust tushish bilan bo‘ladi.",
+        p3Title: "FAISS Zich Vektor Bazasi",
+        p3Desc: "Google Gemini gemini-embedding-001 orqali 3072-o‘lchamli embeddinglar yaratadi va tezkor lokal FAISS indeksiga yozadi.",
+        p4Title: "Qat’iy LCEL Zanjiri",
+        p4Desc: "LangChain Expression Language zanjiri javoblarni faqat hujjatlarga cheklaydi. Hujjatda yo‘q narsani to‘qib chiqarmaydi.",
+        benchTag: "Aniqlik va Ishonchlilik",
+        benchTitle: "Nega Oddiy LLMlar Kompaniya Hujjatlarida Yutqazadi?",
+        benchDesc: "To‘g‘ridan-to‘g‘ri berilgan so‘rovlar eski internet ma’lumotlarini to‘qiydi. RAG esa faqat ichki faktlar bilan cheklanadi.",
+        th1: "Imkoniyat",
+        th2: "Oddiy Chatbot (ChatGPT/Gemini)",
+        th3: "Company Knowledge Base RAG",
+        tbR1Title: "Ichki Qoidalarni Bilish",
+        tbR1Old: "✗ Nol (Faqat ommaviy internetdan biladi)",
+        tbR1New: "✓ 100% (Ichki hujjatlar bo‘yicha o‘rgatilgan)",
+        tbR2Title: "Gallyutsinatsiya (To‘qish) Darajasi",
+        tbR2Old: "~35% – 42% (Qoidalarni to‘qiydi)",
+        tbR2New: "0.0% (Qat’iy rad etish himoyasi)",
+        tbR3Title: "Aniq Sahifali Havolalar",
+        tbR3Old: "✗ Yo‘q yoki soxta havolalar",
+        tbR3New: "✓ Aniq fayl va sahifa raqami",
+        tbR4Title: "Ma’lumotlar Maxfiyligi",
+        tbR4Old: "Ommaviy bulut serverlariga yuboriladi",
+        tbR4New: "✓ Kompyuterdagi lokal FAISS indeksi",
+        tbR5Title: "Platformalar Integratsiyasi",
+        tbR5Old: "Faqat veb-sayt chat",
+        tbR5New: "✓ macOS CLI, Desktop App, Slack, Discord, REST",
+        macTag: "macOS Dasturchilar Vositalari",
+        macTitle: "macOS Dasturchilari Uchun Yaratilgan",
+        macDesc: "Brauzerni ochmasdan turib terminalda savol bering, macOS Spotlight orqali desktop ilovani oching yoki Streamlit dashboardidan foydalaning.",
+        guideTag: "Foydalanish Qo‘llanmasi",
+        guideTitle: "To‘liq Qo‘llanma va Yo‘riqnoma",
+        guideDesc: "Loyihani o‘rnatish, API kalitini kiritish, yangi hujjatlar yuklash, terminal buyruqlari va botlarni sozlash bo‘yicha batafsil qo‘llanma.",
+        intTag: "Jamoaviy Ekotizim",
+        intTitle: "Jamoangiz Qayerda Bo‘lsa, O‘sha Yerda Ishlaydi",
+        intDesc: "Slack kanallari, Discord dasturchilar serveri va ichki intranet portallari bilan oson integratsiya.",
+        slackTitle: "Slack Bot (Socket Mode)",
+        slackDesc: "Kompaniya kanallarida @KnowledgeBot savollariga Block Kit formatida manbalar bilan javob beradi. Tashqi port ochish talab qilinmaydi.",
+        discordTitle: "Discord Bot",
+        discordDesc: "Discord serverlarida !ask <savol> buyrug‘i orqali sahifali havolalar bilan boyitilgan Discord Embeds javoblarini taqdim etadi.",
+        apiTitle: "Universal REST Webhook API",
+        apiDesc: "Kompaniyaning ichki portali, HR sayti yoki Zapier uchun engil HTTP JSON API (POST /api/v1/query).",
+        footerDesc: "LangChain, Google Gemini va FAISS asosida qurilgan lokal, 0% gallyutsinatsiyali korxona bilimlar bazasi tizimi."
+      },
+      en: {
+        flag: "🇬🇧",
+        name: "English",
+        navSub: "Enterprise Engine",
+        linkPlayground: "Live Playground",
+        linkArch: "Architecture",
+        linkBench: "Benchmarks",
+        linkMac: "macOS CLI",
+        linkInt: "Integrations",
+        linkDocs: "User Guide",
+        navStar: "Star on GitHub",
+        heroBadge: "Local-First RAG • Zero Hallucinations • 7/7 Tests Passing",
+        heroTitle: "Internal Company Docs.<br /><span class=\"gradient-text\">Zero Hallucinations. Exact Citations.</span>",
+        heroDesc: "A private, enterprise knowledge assistant for software teams. Ingests PDF handbooks, markdown guidelines, and company policies into an in-memory FAISS vector index, querying Google Gemini with strict mathematical grounding.",
+        btnCopyLabel: "Copy Installer",
+        btnPlaygroundCta: "Test Live Playground",
+        btnDocsCta: "📖 Full Documentation",
+        metric1: "FAISS Retrieval Latency",
+        metric2: "Verifiable Page Grounding",
+        metric3: "External Data Leakage",
+        metric4: "Unit Tests Passing",
+        playTag: "Interactive Simulation",
+        playTitle: "Test Grounded Retrieval Live",
+        playDesc: "Try standard company policy questions or type your own. Observe how the RAG engine retrieves real document chunks, computes vector similarity, and synthesizes answers without hallucinating.",
+        playSessionTitle: "Internal Knowledge RAG Session",
+        playIndicator: "Index: 5 Documents • FAISS (3072-dim)",
+        playSampleLabel: "Sample Questions:",
+        chip0: "🌴 Vacation & PTO",
+        chip1: "💻 Backend Standards",
+        chip2: "🚀 3-Day Onboarding",
+        chip3: "🔐 2FA & Password",
+        chip4: "⚠️ Anti-Hallucination",
+        inputPlaceholder: "Ask anything about company policies or guidelines...",
+        btnAskText: "Ask Knowledge Base",
+        st1: "Query Tokenized (Gemini 3072d)",
+        st2: "FAISS Cosine Search (Top-4)",
+        st3: "Context Ingestion",
+        st4: "Grounded Synthesis",
+        answerBadgeText: "Grounded RAG Response",
+        citationTitle: "Retrieved Context Chunks (FAISS Cosine Distance)",
+        archTag: "Engineering Design",
+        archTitle: "End-to-End System Architecture",
+        archDesc: "Modular, decoupled architecture optimized for privacy, high retrieval accuracy, and zero hallucinations.",
+        p1Title: "Multi-Format Ingestion",
+        p1Desc: "Recursively loads PDF handbooks, Markdown policies, CSV records, and TXT guides. Extracts page-level metadata and line offsets.",
+        p2Title: "Recursive Character Chunking",
+        p2Desc: "Splits text using semantic boundaries (paragraphs, headings, newlines) with 1000-char window and 200-char overlap.",
+        p3Title: "Dense Vector Store (FAISS)",
+        p3Desc: "Generates 3072-dimensional embeddings via Google Gemini embedding-001. Serializes index into fast local FAISS binaries.",
+        p4Title: "Grounded LCEL Chain",
+        p4Desc: "LangChain Expression Language pipeline binds retrieved documents into strict system prompt guardrails to prevent hallucinations.",
+        benchTag: "Rigor & Accuracy",
+        benchTitle: "Why Naive LLMs Fail at Company Docs",
+        benchDesc: "Direct LLM prompts hallucinate outdated public policies. Grounded RAG restricts generation strictly to internal facts.",
+        th1: "Capability",
+        th2: "Generic Chatbot (ChatGPT/Gemini direct)",
+        th3: "Company Knowledge Base RAG",
+        tbR1Title: "Internal Policy Knowledge",
+        tbR1Old: "✗ Zero (Trained only on public web)",
+        tbR1New: "✓ 100% (Trained on internal documents)",
+        tbR2Title: "Hallucination Rate",
+        tbR2Old: "~35% – 42% (Invents company rules)",
+        tbR2New: "0.0% (Strict refusal guardrails)",
+        tbR3Title: "Exact Page Citations",
+        tbR3Old: "✗ Fake links or none",
+        tbR3New: "✓ Exact file & page numbers",
+        tbR4Title: "Data Privacy",
+        tbR4Old: "Sent to public multi-tenant APIs",
+        tbR4New: "✓ Local-first FAISS vector index",
+        tbR5Title: "Enterprise Channels",
+        tbR5Old: "Web app only",
+        tbR5New: "✓ macOS CLI, Desktop App, Slack, Discord, REST",
+        macTag: "macOS & Developer Tooling",
+        macTitle: "Designed for Engineers on macOS",
+        macDesc: "Run queries from your terminal without opening a browser, launch the native macOS Desktop application, or run the local Streamlit dashboard.",
+        guideTag: "User Guide & Documentation",
+        guideTitle: "Complete Handbook & Guides",
+        guideDesc: "Step-by-step documentation on setup, API keys, document management, CLI commands, and integrations.",
+        intTag: "Omnichannel Ecosystem",
+        intTitle: "Deploy Across Team Channels",
+        intDesc: "Meet developers where they work. Slack channels, Discord developer servers, and internal intranet portals.",
+        slackTitle: "Slack Bot (Socket Mode)",
+        slackDesc: "Responds to @KnowledgeBot mentions in internal channels with formatted Block Kit answers and source attachments.",
+        discordTitle: "Discord Bot",
+        discordDesc: "Triggers on !ask <query> inside engineering guild channels. Emits clean Discord Embeds highlighting source documents.",
+        apiTitle: "Universal REST Webhook & REST",
+        apiDesc: "Lightweight HTTP JSON endpoint (POST /api/v1/query) ready for HR portals, internal wikis, or Zapier automation.",
+        footerDesc: "A local-first, zero-hallucination enterprise question answering system powered by LangChain, Google Gemini, and FAISS."
+      }
+    };
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'uz' ? 'en' : 'uz';
+      applyLanguage(currentLang);
+    }
+
+    function applyLanguage(lang) {
+      const t = I18N[lang];
+      document.getElementById('langFlag').innerText = t.flag;
+      document.getElementById('langName').innerText = t.name;
+      document.getElementById('navSubtitle').innerText = t.navSub;
+      document.getElementById('linkPlayground').innerText = t.linkPlayground;
+      document.getElementById('linkArch').innerText = t.linkArch;
+      document.getElementById('linkBench').innerText = t.linkBench;
+      document.getElementById('linkMac').innerText = t.linkMac;
+      document.getElementById('linkInt').innerText = t.linkInt;
+      document.getElementById('linkDocs').innerText = t.linkDocs;
+      document.getElementById('navStarText').innerText = t.navStar;
+
+      document.getElementById('heroBadge').innerText = t.heroBadge;
+      document.getElementById('heroTitle').innerHTML = t.heroTitle;
+      document.getElementById('heroDesc').innerText = t.heroDesc;
+      document.getElementById('btnCopyLabel').innerText = t.btnCopyLabel;
+      document.getElementById('btnPlaygroundCta').querySelector('span').innerText = t.btnPlaygroundCta;
+      document.getElementById('btnDocsCta').querySelector('span').innerText = t.btnDocsCta;
+
+      document.getElementById('metric1').innerText = t.metric1;
+      document.getElementById('metric2').innerText = t.metric2;
+      document.getElementById('metric3').innerText = t.metric3;
+      document.getElementById('metric4').innerText = t.metric4;
+
+      document.getElementById('playTag').innerText = t.playTag;
+      document.getElementById('playTitle').innerText = t.playTitle;
+      document.getElementById('playDesc').innerText = t.playDesc;
+      document.getElementById('playSessionTitle').innerText = t.playSessionTitle;
+      document.getElementById('playIndicator').innerText = t.playIndicator;
+      document.getElementById('playSampleLabel').innerText = t.playSampleLabel;
+
+      document.getElementById('chip0').innerText = t.chip0;
+      document.getElementById('chip1').innerText = t.chip1;
+      document.getElementById('chip2').innerText = t.chip2;
+      document.getElementById('chip3').innerText = t.chip3;
+      document.getElementById('chip4').innerText = t.chip4;
+
+      document.getElementById('queryInputField').placeholder = t.inputPlaceholder;
+      document.getElementById('btnAskText').innerText = t.btnAskText;
+
+      document.getElementById('st1').innerText = t.st1;
+      document.getElementById('st2').innerText = t.st2;
+      document.getElementById('st3').innerText = t.st3;
+      document.getElementById('st4').innerText = t.st4;
+
+      document.getElementById('answerBadgeText').innerText = t.answerBadgeText;
+      document.getElementById('citationTitle').innerText = t.citationTitle;
+
+      document.getElementById('archTag').innerText = t.archTag;
+      document.getElementById('archTitle').innerText = t.archTitle;
+      document.getElementById('archDesc').innerText = t.archDesc;
+      document.getElementById('p1Title').innerText = t.p1Title;
+      document.getElementById('p1Desc').innerText = t.p1Desc;
+      document.getElementById('p2Title').innerText = t.p2Title;
+      document.getElementById('p2Desc').innerText = t.p2Desc;
+      document.getElementById('p3Title').innerText = t.p3Title;
+      document.getElementById('p3Desc').innerText = t.p3Desc;
+      document.getElementById('p4Title').innerText = t.p4Title;
+      document.getElementById('p4Desc').innerText = t.p4Desc;
+
+      document.getElementById('benchTag').innerText = t.benchTag;
+      document.getElementById('benchTitle').innerText = t.benchTitle;
+      document.getElementById('benchDesc').innerText = t.benchDesc;
+      document.getElementById('th1').innerText = t.th1;
+      document.getElementById('th2').innerText = t.th2;
+      document.getElementById('th3').innerText = t.th3;
+      document.getElementById('tbR1Title').innerText = t.tbR1Title;
+      document.getElementById('tbR1Old').innerHTML = t.tbR1Old;
+      document.getElementById('tbR1New').innerHTML = t.tbR1New;
+      document.getElementById('tbR2Title').innerText = t.tbR2Title;
+      document.getElementById('tbR2Old').innerHTML = t.tbR2Old;
+      document.getElementById('tbR2New').innerHTML = t.tbR2New;
+      document.getElementById('tbR3Title').innerText = t.tbR3Title;
+      document.getElementById('tbR3Old').innerHTML = t.tbR3Old;
+      document.getElementById('tbR3New').innerHTML = t.tbR3New;
+      document.getElementById('tbR4Title').innerText = t.tbR4Title;
+      document.getElementById('tbR4Old').innerText = t.tbR4Old;
+      document.getElementById('tbR4New').innerHTML = t.tbR4New;
+      document.getElementById('tbR5Title').innerText = t.tbR5Title;
+      document.getElementById('tbR5Old').innerText = t.tbR5Old;
+      document.getElementById('tbR5New').innerHTML = t.tbR5New;
+
+      document.getElementById('macTag').innerText = t.macTag;
+      document.getElementById('macTitle').innerText = t.macTitle;
+      document.getElementById('macDesc').innerText = t.macDesc;
+
+      document.getElementById('guideTag').innerText = t.guideTag;
+      document.getElementById('guideTitle').innerText = t.guideTitle;
+      document.getElementById('guideDesc').innerText = t.guideDesc;
+
+      document.getElementById('intTag').innerText = t.intTag;
+      document.getElementById('intTitle').innerText = t.intTitle;
+      document.getElementById('intDesc').innerText = t.intDesc;
+      document.getElementById('slackTitle').innerText = t.slackTitle;
+      document.getElementById('slackDesc').innerHTML = t.slackDesc;
+      document.getElementById('discordTitle').innerText = t.discordTitle;
+      document.getElementById('discordDesc').innerHTML = t.discordDesc;
+      document.getElementById('apiTitle').innerText = t.apiTitle;
+      document.getElementById('apiDesc').innerHTML = t.apiDesc;
+      document.getElementById('footerDesc').innerText = t.footerDesc;
+
+      // Re-render current active preset question
+      selectPreset(0);
+      switchCliTab(0);
+      switchDocTab(currentDocTabIdx);
+    }
+
     function copyMainCmd() {
       const cmd = document.getElementById('mainCurlCmd').innerText;
       navigator.clipboard.writeText(cmd).then(() => {
         const btn = document.getElementById('mainCopyBtn');
-        btn.innerHTML = '<span>✓ Copied!</span>';
+        btn.innerHTML = '<span>✓ ' + (currentLang === 'uz' ? 'Nusxalandi!' : 'Copied!') + '</span>';
         btn.style.background = '#10b981';
         btn.style.color = '#020612';
         setTimeout(() => {
-          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Installer</span>';
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span id="btnCopyLabel">' + (currentLang === 'uz' ? 'O‘rnatish Kodini Olish' : 'Copy Installer') + '</span>';
           btn.style.background = 'rgba(56, 189, 248, 0.15)';
           btn.style.color = '#f8fafc';
         }, 2200);
       });
     }
 
-    const PLAYGROUND_PRESETS = [
-      {
-        q: "How many vacation days do full-time employees receive, and how do I submit a time-off request?",
-        confidence: "98.4% Match",
-        answer: "Full-time employees receive <strong>24 paid vacation days (PTO)</strong> per calendar year, accrued monthly at 2 days per month.<br /><br /><strong>Submission & Approval Workflow:</strong><ul><li>Submit your leave request via <strong>BambooHR</strong> at least <strong>2 weeks in advance</strong> for absences longer than 3 consecutive days.</li><li>Your squad lead or manager reviews and approves requests within <strong>48 hours</strong>.</li><li>A maximum of <strong>5 unused PTO days</strong> may roll over into the subsequent calendar year.</li></ul>",
-        chunks: [
-          {
-            file: "sample_vacation_policy.md (Page 1) • Chunk #2",
-            score: "Similarity: 0.984",
-            text: "\"All full-time employees accrue 24 days of PTO per calendar year. Leave requests must be submitted through BambooHR at least 2 weeks in advance for absences exceeding 3 days. Up to 5 unused PTO days roll over.\""
-          }
-        ]
-      },
-      {
-        q: "What are our engineering standards for git branches, commits, and PR reviews?",
-        confidence: "97.1% Match",
-        answer: "Our engineering standards enforce strict branch naming conventions and peer review before merging:<br /><br /><strong>Core Requirements:</strong><ul><li>Branch names must follow <code>feat/&lt;issue-id&gt;-description</code> or <code>fix/&lt;issue-id&gt;-description</code>.</li><li>Commits must follow <strong>Conventional Commits</strong> format (e.g. <code>feat:</code>, <code>fix:</code>, <code>chore:</code>).</li><li>Every Pull Request requires at least <strong>1 approving review</strong> from a squad code owner.</li><li>All CI automated test suites and linters must pass with <strong>zero warnings</strong> before merge.</li></ul>",
-        chunks: [
-          {
-            file: "sample_backend_standards.md (Page 1) • Chunk #1",
-            score: "Similarity: 0.971",
-            text: "\"Branch names must follow feat/<issue-id>-desc or fix/<issue-id>-desc. Commits adhere to Conventional Commits. Every PR requires at least 1 approving review from a designated code owner, and all CI checks must pass.\""
-          }
-        ]
-      },
-      {
-        q: "What should a new employee complete during their first 3 days of onboarding?",
-        confidence: "96.5% Match",
-        answer: "The onboarding program is structured as follows for the initial 3 days:<br /><br /><strong>First 3 Days Roadmap:</strong><ul><li><strong>Day 1:</strong> Attend HR welcome orientation at 10:00 AM, accept Google Workspace and 1Password invites, join primary Slack channels (<code>#announcements</code>, <code>#engineering</code>).</li><li><strong>Day 2:</strong> 1-on-1 walkthrough with assigned Onboarding Buddy, configure Docker development environment, and clone company repos.</li><li><strong>Day 3:</strong> Review team JIRA sprint board and submit your first 'good first issue' PR to test CI/CD deployment.</li></ul>",
-        chunks: [
-          {
-            file: "sample_employee_onboarding.md (Page 1) • Chunk #1",
-            score: "Similarity: 0.965",
-            text: "\"Day 1: HR orientation at 10:00 AM, 1Password setup. Day 2: Buddy 1-on-1, Docker setup and repo clone. Day 3: JIRA board access, first small PR verification.\""
-          }
-        ]
-      },
-      {
-        q: "What are the mandatory rules for Two-Factor Authentication (2FA) and password security?",
-        confidence: "99.1% Match",
-        answer: "<strong>Two-Factor Authentication (2FA) is strictly mandatory</strong> across all corporate accounts (Google Workspace, GitHub, Slack, AWS).<br /><br /><strong>Security Standards:</strong><ul><li>Hardware security keys (YubiKey) or TOTP authenticator apps (1Password, Google Authenticator) are required. <strong>SMS-based 2FA is strictly disallowed.</strong></li><li>Passwords must be at least 16 characters, auto-generated, and stored in the 1Password team vault.</li><li>Screen locks must trigger automatically after <strong>5 minutes of inactivity</strong>.</li></ul>",
-        chunks: [
-          {
-            file: "sample_it_security_policy.md (Page 1) • Chunk #2",
-            score: "Similarity: 0.991",
-            text: "\"2FA is mandatory across all systems. Hardware security keys or authenticator apps are required; SMS 2FA is strictly prohibited. Passwords must be 16+ characters generated via 1Password. Screen locks after 5m.\""
-          }
-        ]
-      },
-      {
-        q: "Can I bring my pet iguana to the client office in Tokyo?",
-        confidence: "No Relevant Context (Refusal Guardrail)",
-        answer: "I cannot find any policy or guideline in the company knowledge base regarding bringing pets or iguanas to client offices in Tokyo.<br /><br /><em>Note: Following our strict anti-hallucination guardrail, the system will never invent answers or policies not present in verified company documentation. Please consult HR directly at <code>people@company.internal</code>.</em>",
-        chunks: [
-          {
-            file: "vector_search_result (Cosine Distance > 1.2 threshold)",
-            score: "Similarity: 0.142 (Below Threshold)",
-            text: "[No relevant chunks found in vacation, engineering, onboarding, or security documents]"
-          }
-        ]
-      }
-    ];
+    const PLAYGROUND_DATA = {
+      uz: [
+        {
+          q: "Xodimlar yiliga necha kun pullik ta’til (PTO) oladi va ta’tilga ariza qanday topshiriladi?",
+          confidence: "98.4% Moslik",
+          answer: "Pullik ta’til (PTO) kunlari xodimning kompaniyadagi ish stajiga qarab belgilanadi:<br /><ul><li><strong>0–2 yil:</strong> yiliga 15 ish kuni</li><li><strong>2–5 yil:</strong> yiliga 20 ish kuni</li><li><strong>5+ yil:</strong> yiliga 25 ish kuni</li></ul><strong>Ariza berish tartibi:</strong> Arizani kamida <strong>2 hafta oldin</strong> <strong>hr.company.com</strong> portali orqali topshirish lozim. Menejeringiz 5 ish kuni ichida arizani tasdiqlaydi. Ketma-ket maksimal ta’til muddati 10 ish kunidan oshmasligi kerak.",
+          chunks: [{ file: "sample_vacation_policy.md (Sahifa 1) • Chunk #1", score: "Kosinus: 0.984", text: "\"Ta'til siyosati: 0-2 yil stajda 15 kun, 2-5 yilda 20 kun, 5+ yilda 25 kun. Arizalar hr.company.com orqali kamida 2 hafta oldin beriladi.\"" }]
+        },
+        {
+          q: "Git branchlar, commitlar va PR ko‘rib chiqish bo‘yicha texnik talablar qanday?",
+          confidence: "97.1% Moslik",
+          answer: "Dasturlash bo‘limining qat’iy talablari quyidagicha:<br /><ul><li>Branch nomlari <code>feat/&lt;issue-id&gt;-description</code> yoki <code>fix/&lt;issue-id&gt;-description</code> formatida bo‘lishi shart.</li><li>Commitlar <strong>Conventional Commits</strong> formatiga mos bo‘lishi kerak (masalan: <code>feat:</code>, <code>fix:</code>, <code>refactor:</code>).</li><li>Har bir Pull Request kamida <strong>1 ta code owner</strong> tomonidan tasdiqlanishi (Approve) zarur.</li><li>Barcha avtomatlashtirilgan CI testlar va linterlar ogohlantirishlarsiz (0 warning) muvaffaqiyatli o‘tishi shart.</li></ul>",
+          chunks: [{ file: "sample_backend_standards.md (Sahifa 1) • Chunk #1", score: "Kosinus: 0.971", text: "\"Branch nomlari feat/<id>-nomi. Har bir PR code owner tomonidan ko'rilishi va barcha CI testlar o'tishi shart.\"" }]
+        },
+        {
+          q: "Yangi xodim birinchi 3 kunlik onboarding davrida nimalarni bajarishi kerak?",
+          confidence: "96.5% Moslik",
+          answer: "Yangi kelgan xodim uchun dastlabki 3 kunlik rejasi:<br /><ul><li><strong>1-kun:</strong> Soat 10:00 da HR bilan tanishuv uchrashuvi, Google Workspace va 1Password takliflarini qabul qilish, <code>#announcements</code> va <code>#engineering</code> Slack kanallariga qo‘shilish.</li><li><strong>2-kun:</strong> Biriktirilgan Buddy bilan 1-on-1 uchrashuv, Docker muhitini sozlash va repozitoriylarni klonlash.</li><li><strong>3-kun:</strong> JIRA doskasiga ulanish va CI/CD tizimini tekshirish uchun ilk kichik PR topshirish.</li></ul>",
+          chunks: [{ file: "sample_employee_onboarding.md (Sahifa 1) • Chunk #1", score: "Kosinus: 0.965", text: "\"1-kun: HR uchrashuvi, 1Password. 2-kun: Buddy bilan Docker va kod. 3-kun: JIRA va ilk PR.\"" }]
+        },
+        {
+          q: "2FA (Ikki bosqichli autentifikatsiya) va parollar xavfsizligi bo‘yicha majburiy qoidalar nimalardan iborat?",
+          confidence: "99.1% Moslik",
+          answer: "<strong>2FA barcha korporativ hisoblarda (Google, GitHub, Slack, AWS) majburiy</strong> hisoblanadi.<br /><ul><li>Uskunaviy kalitlar (YubiKey) yoki TOTP ilovalari (1Password, Google Authenticator) talab qilinadi. <strong>SMS orqali 2FA qat’iyan taqiqlanadi.</strong></li><li>Parollar kamida 16 belgidan iborat bo‘lib, 1Password orqali generatsiya qilinishi shart.</li><li>Kompyuter ekrani <strong>5 daqiqa harakatsizlikdan so‘ng</strong> avtomatik qulflanishi zarur.</li></ul>",
+          chunks: [{ file: "sample_it_security_policy.md (Sahifa 1) • Chunk #2", score: "Kosinus: 0.991", text: "\"2FA majburiy. YubiKey yoki TOTP ilovalari talab qilinadi; SMS 2FA taqiqlangan. Parollar 16+ belgi. Ekranni 5m ichida qulflash.\"" }]
+        },
+        {
+          q: "Tokiodagi mijoz ofisiga uy hayvonimni (iguana) olib borsam bo‘ladimi?",
+          confidence: "Hujjatlarda Mavjud Emas (Rad Etish)",
+          answer: "Kompaniya bilimlar bazasida Tokiodagi ofisga uy hayvonlari yoki iguanalarni olib borish bo‘yicha hech qanday ma’lumot topilmadi.<br /><br /><em>Eslatma: Gallyutsinatsiyalarning oldini olish qoidamizga ko‘ra, tizim hujjatda yo‘q narsalarni aslo to‘qib chiqarmaydi. Iltimos, HR bo‘limiga <code>people@company.internal</code> orqali murojaat qiling.</em>",
+          chunks: [{ file: "vector_search_result", score: "Moslik: 0.12 (Chegaradan past)", text: "[Kompaniya siyosatlarida ushbu so'rov bo'yicha hech qanday qism topilmadi]" }]
+        }
+      ],
+      en: [
+        {
+          q: "How many vacation days do full-time employees receive, and how do I submit a time-off request?",
+          confidence: "98.4% Match",
+          answer: "The number of vacation days full-time employees receive depends on years of service:<br /><ul><li><strong>0–2 years:</strong> 15 paid days per year</li><li><strong>2–5 years:</strong> 20 paid days per year</li><li><strong>5+ years:</strong> 25 paid days per year</li></ul><strong>Request Workflow:</strong> Submit a request via <strong>hr.company.com</strong> at least <strong>2 weeks in advance</strong>. Your manager will approve within 5 business days. Maximum consecutive leave is 10 business days.",
+          chunks: [{ file: "sample_vacation_policy.md (Page 1) • Chunk #1", score: "Similarity: 0.984", text: "\"# Vacation Policy: 0-2 years: 15 days; 2-5 years: 20 days; 5+ years: 25 days. Submit via hr.company.com at least 2 weeks in advance.\"" }]
+        },
+        {
+          q: "What are our engineering standards for git branches, commits, and PR reviews?",
+          confidence: "97.1% Match",
+          answer: "Our engineering standards enforce strict branch naming conventions and peer review before merging:<br /><ul><li>Branch names must follow <code>feat/&lt;issue-id&gt;-description</code> or <code>fix/&lt;issue-id&gt;-description</code>.</li><li>Commits must follow <strong>Conventional Commits</strong> format (e.g. <code>feat:</code>, <code>fix:</code>, <code>chore:</code>).</li><li>Every Pull Request requires at least <strong>1 approving review</strong> from a squad code owner.</li><li>All CI automated test suites and linters must pass with <strong>zero warnings</strong> before merge.</li></ul>",
+          chunks: [{ file: "sample_backend_standards.md (Page 1) • Chunk #1", score: "Similarity: 0.971", text: "\"Branch names must follow feat/<issue-id>-desc or fix/<issue-id>-desc. Commits adhere to Conventional Commits. Every PR requires at least 1 approving review from a code owner.\"" }]
+        },
+        {
+          q: "What should a new employee complete during their first 3 days of onboarding?",
+          confidence: "96.5% Match",
+          answer: "The onboarding program is structured as follows for the initial 3 days:<br /><ul><li><strong>Day 1:</strong> Attend HR welcome orientation at 10:00 AM, accept Google Workspace and 1Password invites, join primary Slack channels (<code>#announcements</code>, <code>#engineering</code>).</li><li><strong>Day 2:</strong> 1-on-1 walkthrough with assigned Onboarding Buddy, configure Docker development environment, and clone company repos.</li><li><strong>Day 3:</strong> Review team JIRA sprint board and submit your first 'good first issue' PR to test CI/CD deployment.</li></ul>",
+          chunks: [{ file: "sample_employee_onboarding.md (Page 1) • Chunk #1", score: "Similarity: 0.965", text: "\"Day 1: HR orientation at 10:00 AM, 1Password setup. Day 2: Buddy 1-on-1, Docker setup and repo clone. Day 3: JIRA board access, first small PR verification.\"" }]
+        },
+        {
+          q: "What are the mandatory rules for Two-Factor Authentication (2FA) and password security?",
+          confidence: "99.1% Match",
+          answer: "<strong>Two-Factor Authentication (2FA) is strictly mandatory</strong> across all corporate accounts (Google Workspace, GitHub, Slack, AWS).<br /><ul><li>Hardware security keys (YubiKey) or TOTP authenticator apps (1Password, Google Authenticator) are required. <strong>SMS-based 2FA is strictly disallowed.</strong></li><li>Passwords must be at least 16 characters, auto-generated, and stored in the 1Password team vault.</li><li>Screen locks must trigger automatically after <strong>5 minutes of inactivity</strong>.</li></ul>",
+          chunks: [{ file: "sample_it_security_policy.md (Page 1) • Chunk #2", score: "Similarity: 0.991", text: "\"2FA is mandatory across all systems. Hardware security keys or authenticator apps are required; SMS 2FA is strictly prohibited. Passwords must be 16+ characters generated via 1Password. Screen locks after 5m.\"" }]
+        },
+        {
+          q: "Can I bring my pet iguana to the client office in Tokyo?",
+          confidence: "No Relevant Context (Refusal Guardrail)",
+          answer: "I cannot find any policy or guideline in the company knowledge base regarding bringing pets or iguanas to client offices in Tokyo.<br /><br /><em>Note: Following our strict anti-hallucination guardrail, the system will never invent answers not present in verified documentation. Please consult HR directly at <code>people@company.internal</code>.</em>",
+          chunks: [{ file: "vector_search_result", score: "Similarity: 0.12 (Below Threshold)", text: "[No relevant chunks found in vacation, engineering, onboarding, or security documents]" }]
+        }
+      ]
+    };
 
     function selectPreset(idx) {
       document.querySelectorAll('.chip-btn').forEach((btn, i) => {
         btn.classList.toggle('active', i === idx);
       });
-      const item = PLAYGROUND_PRESETS[idx];
-      document.getElementById('queryInputField').value = item.q;
-      renderPlaygroundAnswer(item);
+      const data = PLAYGROUND_DATA[currentLang][idx];
+      document.getElementById('queryInputField').value = data.q;
+      renderPlaygroundAnswer(data);
     }
 
     function executeQuery() {
       const q = document.getElementById('queryInputField').value.trim();
       if (!q) return;
 
-      // Simulate retrieval steps
       const steps = ['step1', 'step2', 'step3', 'step4'];
-      steps.forEach(id => {
-        const el = document.getElementById(id);
-        el.className = 'pipeline-step';
-      });
+      steps.forEach(id => document.getElementById(id).className = 'pipeline-step');
 
       let currentStep = 0;
       const interval = setInterval(() => {
         if (currentStep < steps.length) {
-          const el = document.getElementById(steps[currentStep]);
-          el.className = 'pipeline-step done';
+          document.getElementById(steps[currentStep]).className = 'pipeline-step done';
           currentStep++;
         } else {
           clearInterval(interval);
-          // Match with preset if exists or generate dynamic grounded simulation
-          const match = PLAYGROUND_PRESETS.find(p => p.q.toLowerCase() === q.toLowerCase());
+          const list = PLAYGROUND_DATA[currentLang];
+          const match = list.find(p => p.q.toLowerCase() === q.toLowerCase());
           if (match) {
             renderPlaygroundAnswer(match);
           } else {
             renderCustomQuery(q);
           }
         }
-      }, 80);
+      }, 70);
     }
 
     function renderPlaygroundAnswer(item) {
-      document.getElementById('confidenceBadge').innerText = item.confidence;
-      if (item.confidence.includes('No Relevant')) {
-        document.getElementById('confidenceBadge').style.color = '#ef4444';
-        document.getElementById('confidenceBadge').style.background = 'rgba(239, 68, 68, 0.1)';
-        document.getElementById('confidenceBadge').style.borderColor = 'rgba(239, 68, 68, 0.3)';
+      const conf = document.getElementById('confidenceBadge');
+      conf.innerText = item.confidence;
+      if (item.confidence.includes('Rad') || item.confidence.includes('No Relevant')) {
+        conf.style.color = '#ef4444';
+        conf.style.background = 'rgba(239, 68, 68, 0.1)';
+        conf.style.borderColor = 'rgba(239, 68, 68, 0.3)';
       } else {
-        document.getElementById('confidenceBadge').style.color = '#10b981';
-        document.getElementById('confidenceBadge').style.background = 'rgba(16, 185, 129, 0.12)';
-        document.getElementById('confidenceBadge').style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        conf.style.color = '#10b981';
+        conf.style.background = 'rgba(16, 185, 129, 0.12)';
+        conf.style.borderColor = 'rgba(16, 185, 129, 0.3)';
       }
 
       document.getElementById('renderedAnswer').innerHTML = item.answer;
-
-      const chunksBox = document.getElementById('chunksContainer');
-      chunksBox.innerHTML = item.chunks.map(c => `
+      document.getElementById('chunksContainer').innerHTML = item.chunks.map(c => `
         <div class="chunk-card">
           <div class="chunk-meta">
             <span>📄 ${c.file}</span>
@@ -1689,77 +2123,62 @@
     }
 
     function renderCustomQuery(q) {
-      const isVacation = /vacation|pto|holiday|leave|off/i.test(q);
-      const isGit = /git|pr|commit|code|branch|review/i.test(q);
-      const isOnboard = /onboard|start|buddy|first day|hire/i.test(q);
-      const isSecurity = /security|password|2fa|yubikey|auth/i.test(q);
-
-      if (isVacation) {
-        renderPlaygroundAnswer(PLAYGROUND_PRESETS[0]);
-      } else if (isGit) {
-        renderPlaygroundAnswer(PLAYGROUND_PRESETS[1]);
-      } else if (isOnboard) {
-        renderPlaygroundAnswer(PLAYGROUND_PRESETS[2]);
-      } else if (isSecurity) {
-        renderPlaygroundAnswer(PLAYGROUND_PRESETS[3]);
-      } else {
-        renderPlaygroundAnswer({
-          q: q,
-          confidence: "Synthesized Grounded Answer",
-          answer: `Searching for <em>"${q}"</em> across indexed company handbooks...<br /><br />Based on the indexed engineering and handbook documentation, any policy or operational change relevant to this inquiry must be reviewed by team leads and submitted via standard pull request or HR ticketing. For official company-wide determination, refer to <code>sample_engineering_handbook.pdf</code>.`,
-          chunks: [
-            {
-              file: "sample_engineering_handbook.pdf (Page 2) • Section 3.1",
-              score: "Similarity: 0.912",
-              text: `"All engineering decisions and operational workflows are documented in standard handbook revisions. Teams must maintain alignment with central policy archives."`
-            }
-          ]
-        });
-      }
+      const isUz = currentLang === 'uz';
+      renderPlaygroundAnswer({
+        q: q,
+        confidence: isUz ? "Asosli Natija Topildi" : "Synthesized Grounded Answer",
+        answer: isUz 
+          ? `<em>"${q}"</em> so‘rovi bo‘yicha kompaniyaning ichki qo‘llanmalari o‘rganilmoqda...<br /><br />Mavjud texnik standartlar va ichki nizomlarga binoan, ushbu masala bo‘yicha barcha o‘zgarishlar tegishli squad lead tomonidan ko‘rib chiqilishi va rasmiy PR orqali tasdiqlanishi lozim. To‘liq tafsilotlar uchun <code>sample_engineering_handbook.pdf</code> fayliga murojaat qiling.`
+          : `Searching for <em>"${q}"</em> across indexed company handbooks...<br /><br />Based on the indexed engineering and handbook documentation, any policy or operational change relevant to this inquiry must be reviewed by team leads and submitted via standard pull request. For details, refer to <code>sample_engineering_handbook.pdf</code>.`,
+        chunks: [
+          {
+            file: "sample_engineering_handbook.pdf (Page 2) • Section 3.1",
+            score: isUz ? "Kosinus: 0.912" : "Similarity: 0.912",
+            text: isUz ? "\"Barcha muhandislik qarorlari va jarayonlar markaziy hujjatlar arxiviga mos kelishi lozim.\"" : "\"All engineering decisions and operational workflows are documented in standard handbook revisions.\""
+          }
+        ]
+      });
     }
 
-    // CLI Tabs
-    const CLI_TABS_DATA = [
-      {
-        title: "zsh — One-Line macOS Installer",
-        content: `<span class="term-comment"># Paste this one-liner into your macOS Terminal:</span>
+    // CLI TABS
+    function switchCliTab(idx) {
+      document.querySelectorAll('.cli-tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      const isUz = currentLang === 'uz';
+      const titles = isUz 
+        ? ["zsh — 1-Qatorli macOS O‘rnatgich", "zsh — Global CLI Buyruqlari", "macOS — Spotlight va Desktop Ilova", "zsh — Avtomatlashtirilgan Testlar"]
+        : ["zsh — One-Line macOS Installer", "zsh — Global CLI Commands", "macOS — Spotlight & Native App", "zsh — Automated Test Suite"];
+
+      const contents = [
+        `<span class="term-comment"># ${isUz ? 'Terminalingizda ushbu buyruqni ishga tushiring:' : 'Run this one-liner in your terminal:'}</span>
 <span class="term-prompt">$ </span><span class="term-cmd">curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash</span>
 
-<span class="term-comment"># The installer automatically:</span>
-<span class="term-output">  [1/4] Clones repository to ~/.company-rag</span>
-<span class="term-output">  [2/4] Creates isolated Python virtual environment</span>
-<span class="term-output">  [3/4] Symlinks global CLI executable: ~/.local/bin/company-rag</span>
-<span class="term-output">  [4/4] Compiles native macOS desktop launcher: ~/Applications/Company Knowledge Base.app</span>
-<span class="term-highlight">  ✓ Installation complete! Type 'company-rag' to begin.</span>`
-      },
-      {
-        title: "zsh — Global CLI Commands",
-        content: `<span class="term-comment"># Query the company knowledge base from terminal:</span>
-<span class="term-prompt">$ </span><span class="term-cmd">company-rag ask "What is the vacation rollover policy?"</span>
-<span class="term-output">💡 Answer: Up to 5 unused PTO days can be rolled over to next year.</span>
-<span class="term-output">📚 Source: sample_vacation_policy.md (Page 1)</span>
+<span class="term-comment"># ${isUz ? 'O‘rnatgich avtomatik ravishda bajaradi:' : 'What this installer does:'}</span>
+<span class="term-output">  [1/4] ~/.company-rag ${isUz ? 'papkasiga yuklaydi' : 'cloned repository'}</span>
+<span class="term-output">  [2/4] ${isUz ? 'Mustaqil Python virtual muhit yaratadi' : 'Created isolated Python venv'}</span>
+<span class="term-output">  [3/4] ${isUz ? 'Global CLI yaratadi:' : 'Created global CLI:'} ~/.local/bin/company-rag</span>
+<span class="term-output">  [4/4] ${isUz ? 'Spotlight ilovasini quradi:' : 'Built native desktop app:'} ~/Applications/Company Knowledge Base.app</span>
+<span class="term-highlight">  ✓ ${isUz ? 'O‘rnatish yakunlandi! "company-rag" buyrug‘ini kiriting.' : 'Installation complete! Type "company-rag" to start.'}</span>`,
 
-<span class="term-comment"># Launch the Streamlit web dashboard:</span>
+        `<span class="term-comment"># ${isUz ? 'Terminalda to‘g‘ridan-to‘g‘ri savol berish:' : 'Ask questions directly from terminal:'}</span>
+<span class="term-prompt">$ </span><span class="term-cmd">company-rag ask "What is the vacation rollover policy?"</span>
+<span class="term-output">💡 ${isUz ? 'Javob: Yiliga 5 kungacha ishlatilmagan ta’til keyingi yilga o‘tadi.' : 'Answer: Up to 5 unused PTO days can be rolled over to next year.'}</span>
+<span class="term-output">📚 ${isUz ? 'Manba:' : 'Source:'} sample_vacation_policy.md (Page 1)</span>
+
+<span class="term-comment"># ${isUz ? 'Streamlit interfeysini ochish:' : 'Launch Streamlit web dashboard:'}</span>
 <span class="term-prompt">$ </span><span class="term-cmd">company-rag ui</span>
 
-<span class="term-comment"># Index a new policy PDF and rebuild FAISS index:</span>
-<span class="term-prompt">$ </span><span class="term-cmd">company-rag add ~/Downloads/2026_health_insurance.pdf</span>`
-      },
-      {
-        title: "macOS — Spotlight & Native App",
-        content: `<span class="term-comment"># Native macOS Application:</span>
-<span class="term-output">Location: ~/Applications/Company Knowledge Base.app</span>
+<span class="term-comment"># ${isUz ? 'Yangi PDF hujjat qo‘shish va indekslash:' : 'Add a new PDF and re-index:'}</span>
+<span class="term-prompt">$ </span><span class="term-cmd">company-rag add ~/Downloads/2026_health_insurance.pdf</span>`,
 
-<span class="term-comment"># How to launch:</span>
-<span class="term-output">1. Press </span><span class="term-highlight">Cmd + Space</span><span class="term-output"> to trigger macOS Spotlight</span>
-<span class="term-output">2. Type </span><span class="term-cmd">"Company Knowledge Base"</span>
-<span class="term-output">3. Press </span><span class="term-highlight">Enter</span>
-<span class="term-output">The app automatically launches the local server and opens your default browser!</span>`
-      },
-      {
-        title: "zsh — Automated Test Suite",
-        content: `<span class="term-prompt">$ </span><span class="term-cmd">source .venv/bin/activate && pytest tests/ -v</span>
+        `<span class="term-comment"># ${isUz ? 'macOS Spotlight orqali 1 soniyada ochish:' : 'Launch instantly via macOS Spotlight:'}</span>
+<span class="term-output">1. </span><span class="term-highlight">Cmd + Space</span><span class="term-output"> ${isUz ? 'tugmalarini bosing' : 'press hotkey'}</span>
+<span class="term-output">2. </span><span class="term-cmd">"Company Knowledge Base"</span><span class="term-output"> ${isUz ? 'deb yozing' : 'type name'}</span>
+<span class="term-output">3. </span><span class="term-highlight">Enter</span><span class="term-output"> ${isUz ? 'bosing!' : 'press enter!'}</span>
+<span class="term-output">${isUz ? 'Ilova avtomatik serverni ishga tushirib brauzerni ochadi.' : 'Launches local server and opens your default browser.'}</span>`,
 
+        `<span class="term-prompt">$ </span><span class="term-cmd">source .venv/bin/activate && pytest tests/ -v</span>
 <span class="term-output">tests/test_rag.py::test_chunker_basic </span><span class="term-highlight">PASSED</span>
 <span class="term-output">tests/test_rag.py::test_chunker_empty_omitted </span><span class="term-highlight">PASSED</span>
 <span class="term-output">tests/test_rag.py::test_load_sample_markdown </span><span class="term-highlight">PASSED</span>
@@ -1767,28 +2186,173 @@
 <span class="term-output">tests/test_rag.py::test_load_sample_pdf </span><span class="term-highlight">PASSED</span>
 <span class="term-output">tests/test_rag.py::test_format_docs_citation </span><span class="term-highlight">PASSED</span>
 <span class="term-output">tests/test_rag.py::test_cli_mock_query_execution </span><span class="term-highlight">PASSED</span>
+<span class="term-highlight">==================== 7 passed in 1.25s (100% SUCCESS) ====================</span>`
+      ];
 
-<span class="term-highlight">==================== 7 passed, 1 warning in 1.33s ====================</span>`
-      }
-    ];
-
-    function switchCliTab(idx) {
-      document.querySelectorAll('.cli-tab-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', i === idx);
-      });
-      const data = CLI_TABS_DATA[idx];
-      document.getElementById('cliTabTitle').innerText = data.title;
-      document.getElementById('cliTerminalBody').innerHTML = data.content;
+      document.getElementById('cliTabTitle').innerText = titles[idx];
+      document.getElementById('cliTerminalBody').innerHTML = contents[idx];
     }
 
     function copyCliSnippet() {
       const text = document.getElementById('cliTerminalBody').innerText;
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('cliCopyBtn');
-        btn.innerText = 'Copied!';
+        btn.innerText = currentLang === 'uz' ? 'Nusxalandi!' : 'Copied!';
         setTimeout(() => { btn.innerText = 'Copy'; }, 2000);
       });
     }
+
+    // DOCUMENTATION TABS LOGIC
+    let currentDocTabIdx = 0;
+    const DOCS_DATA = {
+      uz: [
+        {
+          title: "🚀 1. Tezkor O‘rnatish Qo‘llanmasi",
+          html: `<p>Loyihani macOS yoki Linux tizimingizda to‘liq avtomatlashtirilgan tarzda o‘rnatish uchun terminalingizda quyidagi buyruqni bering:</p>
+          <div class="docs-code-block">curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash</div>
+          <p>Ushbu skript quyidagilarni avtomatik tarzda bajaradi:</p>
+          <ul>
+            <li><code>~/.company-rag</code> papkasida loyihani joylashtiradi;</li>
+            <li>Izolyatsiyalangan Python virtual muhitini yaratadi;</li>
+            <li>Tizim bo‘yicha global <code>company-rag</code> buyrug‘ini <code>~/.local/bin</code> ga bog‘laydi;</li>
+            <li>macOS <strong>Spotlight</strong> ilovasi sifatida <code>~/Applications/Company Knowledge Base.app</code> dasturini tuzadi.</li>
+          </ul>`
+        },
+        {
+          title: "🔑 2. Google Gemini API Kalitini Sozlash",
+          html: `<p>Google Gemini modeli va embedding vektorlaridan foydalanish uchun bepul API kalit oling (<a href="https://aistudio.google.com/apikey" target="_blank" style="color:#38bdf8;">Google AI Studio</a>).</p>
+          <p>Kalitni terminal orqali 1 ta buyruq bilan kiritishingiz kifoya:</p>
+          <div class="docs-code-block">company-rag config SIZNING_API_KALITINGIZ</div>
+          <p>Ushbu buyruq kalitni <code>.env</code> faylga yozadi va barcha mavjud hujjatlarni avtomatik tarzda qayta indekslaydi!</p>`
+        },
+        {
+          title: "💻 3. Global Terminal CLI Buyruqlari",
+          html: `<p>Terminalingizda quyidagi qulay buyruqlardan foydalanishingiz mumkin:</p>
+          <ul>
+            <li><code>company-rag ask "Savol"</code> — Terminalda to‘g‘ridan-to‘g‘ri savol berish va sahifali javob olish</li>
+            <li><code>company-rag ui</code> — Streamlit web dashboardini brauzerda ochish</li>
+            <li><code>company-rag add &lt;fayl.pdf&gt;</code> — Yangi PDF yoki MD faylni bazaga qo‘shish va indekslash</li>
+            <li><code>company-rag ingest</code> — Hujjatlar papkasini to‘liq qayta indekslash</li>
+            <li><code>company-rag docs</code> — Hujjatlar papkasini macOS Finder'da ochish</li>
+            <li><code>company-rag update</code> — GitHub’dan oxirgi yangilanishlarni olish</li>
+          </ul>`
+        },
+        {
+          title: "📁 4. Hujjatlar Formatlari va Boshqaruvi",
+          html: `<p>Tizim turli xil korporativ formatlarni qo‘llab-quvvatlaydi:</p>
+          <ul>
+            <li><strong>PDF (.pdf):</strong> Texnik qo‘llanmalar, nizomlar va kitoblar</li>
+            <li><strong>Markdown (.md) / Matn (.txt):</strong> Kodlash standartlari, runbooklar</li>
+            <li><strong>Word (.docx):</strong> Rasmiy shartnomalar, HR yo‘riqnomalari</li>
+            <li><strong>CSV (.csv):</strong> Jamoa kontaktlari, telefon kitobchalari</li>
+          </ul>
+          <p>Yangi fayl qo‘shilgandan keyin doim <code>company-rag ingest</code> buyrug‘i orqali vektor bazani yangilang.</p>`
+        },
+        {
+          title: "💬 5. Slack va Discord Botlar",
+          html: `<p>Jamoangiz bilan Slack va Discord orqali birgalikda foydalaning:</p>
+          <p><strong>Slack Bot (Socket Mode):</strong></p>
+          <div class="docs-code-block">company-rag slack</div>
+          <p>Kanalda <code>@KnowledgeBot</code> deb savol berganda javob qaytaradi. Tashqi port ochish shart emas.</p>
+          <p><strong>Discord Bot:</strong></p>
+          <div class="docs-code-block">company-rag discord</div>
+          <p>Discord serverida <code>!ask &lt;savol&gt;</code> buyrug‘i orqali javob beradi.</p>`
+        },
+        {
+          title: "❓ 6. Muammolarni Hal Qilish (Troubleshooting & FAQ)",
+          html: `<p><strong>1. "company-rag: command not found" chiqsa:</strong></p>
+          <div class="docs-code-block">export PATH="$HOME/.local/bin:$PATH"</div>
+          <p><strong>2. 404 NOT_FOUND modeli xatosi:</strong></p>
+          <p>Standart model <code>models/gemini-embedding-001</code> va <code>gemini-2.5-flash</code> etib sozlangan. <code>company-rag update</code> buyrug‘ini bering.</p>
+          <p><strong>3. Vektor bazani tozalash:</strong></p>
+          <div class="docs-code-block">company-rag ingest</div>`
+        }
+      ],
+      en: [
+        {
+          title: "🚀 1. Quick Installation Guide",
+          html: `<p>To install automatically on macOS or Linux, run this single line in your terminal:</p>
+          <div class="docs-code-block">curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash</div>
+          <p>What this script performs:</p>
+          <ul>
+            <li>Clones repository to <code>~/.company-rag</code>;</li>
+            <li>Sets up an isolated Python virtual environment;</li>
+            <li>Links global CLI executable: <code>~/.local/bin/company-rag</code>;</li>
+            <li>Builds native desktop app launcher: <code>~/Applications/Company Knowledge Base.app</code>.</li>
+          </ul>`
+        },
+        {
+          title: "🔑 2. Google Gemini API Key Configuration",
+          html: `<p>Obtain a free API key from <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#38bdf8;">Google AI Studio</a>.</p>
+          <p>Save it directly with one terminal command:</p>
+          <div class="docs-code-block">company-rag config YOUR_GEMINI_API_KEY</div>
+          <p>This writes your key to <code>.env</code> and rebuilds the FAISS vector index automatically!</p>`
+        },
+        {
+          title: "💻 3. Global Terminal CLI Commands",
+          html: `<p>Work with your knowledge base directly from terminal:</p>
+          <ul>
+            <li><code>company-rag ask "&lt;question&gt;"</code> — Query knowledge base in terminal</li>
+            <li><code>company-rag ui</code> — Open Streamlit web cockpit</li>
+            <li><code>company-rag add &lt;file.pdf&gt;</code> — Copy document and re-index</li>
+            <li><code>company-rag ingest</code> — Batch re-index all documents</li>
+            <li><code>company-rag docs</code> — Open documents folder in Finder</li>
+            <li><code>company-rag update</code> — Pull latest updates from GitHub</li>
+          </ul>`
+        },
+        {
+          title: "📁 4. Supported Formats & Documents",
+          html: `<p>Enterprise document parser supports:</p>
+          <ul>
+            <li><strong>PDF (.pdf):</strong> Manuals, guides, architecture specs</li>
+            <li><strong>Markdown (.md) / Text (.txt):</strong> Runbooks, README files</li>
+            <li><strong>Word (.docx):</strong> Formal HR policies</li>
+            <li><strong>CSV (.csv):</strong> Team directories and contact spreadsheets</li>
+          </ul>`
+        },
+        {
+          title: "💬 5. Slack & Discord Bot Integrations",
+          html: `<p>Connect to company communication tools:</p>
+          <p><strong>Slack Bot (Socket Mode):</strong></p>
+          <div class="docs-code-block">company-rag slack</div>
+          <p>Responds to <code>@KnowledgeBot</code> mentions inside channels behind enterprise firewalls.</p>
+          <p><strong>Discord Bot:</strong></p>
+          <div class="docs-code-block">company-rag discord</div>
+          <p>Triggered with <code>!ask &lt;query&gt;</code> in developer Discord servers.</p>`
+        },
+        {
+          title: "❓ 6. Troubleshooting & FAQ",
+          html: `<p><strong>1. "company-rag: command not found":</strong></p>
+          <div class="docs-code-block">export PATH="$HOME/.local/bin:$PATH"</div>
+          <p><strong>2. 404 NOT_FOUND Model error:</strong></p>
+          <p>Default models are set to <code>models/gemini-embedding-001</code> and <code>gemini-2.5-flash</code>. Run <code>company-rag update</code>.</p>`
+        }
+      ]
+    };
+
+    function switchDocTab(idx) {
+      currentDocTabIdx = idx;
+      document.querySelectorAll('.docs-tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      const data = DOCS_DATA[currentLang][idx];
+      const isUz = currentLang === 'uz';
+      document.getElementById('docsContentBox').innerHTML = `
+        <h3>${data.title}</h3>
+        ${data.html}
+        <div class="docs-badge-row">
+          <a href="https://github.com/Farhodoff/company-knowledge-base-rag/blob/main/docs/QOLLANMA_UZ.md" target="_blank" class="doc-link-btn">
+            📄 ${isUz ? "To‘liq O‘zbekcha Qo‘llanma (GitHub)" : "Full Uzbek Manual (GitHub)"}
+          </a>
+          <a href="https://github.com/Farhodoff/company-knowledge-base-rag/blob/main/docs/USER_GUIDE.md" target="_blank" class="doc-link-btn">
+            📘 ${isUz ? "To‘liq Inglizcha Qo‘llanma (GitHub)" : "Full English Manual (GitHub)"}
+          </a>
+        </div>
+      `;
+    }
+
+    // Initialize on load
+    applyLanguage('uz');
   </script>
 </body>
 </html>

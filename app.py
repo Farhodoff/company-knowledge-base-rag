@@ -150,31 +150,117 @@ def run_ingestion_in_ui() -> bool:
             return False
 
 
+# Localization dictionary
+I18N = {
+    "uz": {
+        "page_title": "Kompaniya Bilimlar Bazasi | AI Yordamchi",
+        "control_center": "⚙️ Boshqaruv Markazi",
+        "language_select": "🌐 Tilni tanlang / Language",
+        "index_status": "📊 Indeks holati",
+        "index_active": "✅ FAISS vektor indeksi faol",
+        "no_index": "⚠️ Vektor indeksi topilmadi",
+        "chunks": "Fragmentlar",
+        "sources": "Manbalar",
+        "updated": "Yangilangan",
+        "add_docs": "📥 Yangi Hujjat Qo‘shish",
+        "upload_label": "Kompaniya qoidalari yoki qo‘llanmalarini yuklang",
+        "saved_msg": "ta fayl `documents/` papkasiga saqlandi.",
+        "reindex_btn": "🔄 Bilimlar Bazasini Qayta Indekslash",
+        "available_docs": "📁 Mavjud Hujjatlar",
+        "model_settings": "🎛️ Model va Qidiruv Sozlamalari",
+        "llm_model": "LLM Modeli",
+        "temp": "Kreativlik (Temperature)",
+        "top_k": "Qidiriladigan qismlar (Top-K)",
+        "search_algo": "Qidiruv algoritmi",
+        "clear_chat": "🧹 Chatni tozalash",
+        "main_title": "🏢 Kompaniya Bilimlar Bazasi AI",
+        "sub_title": "Kompaniya reglamentlari, texnik standartlari va qo‘llanmalari asosida aniq va to‘g‘ri javob beruvchi ichki AI yordamchi.",
+        "q_vacation": "🌴 Ta’til siyosati",
+        "q_backend": "💻 Backend standartlari",
+        "q_onboard": "🚀 Onboarding jarayoni",
+        "q_security": "🔐 IT Xavfsizlik qoidalari",
+        "prompt_vacation": "Xodimlar yiliga necha kun pullik ta’til (PTO) oladi va ta’tilga ariza qanday topshiriladi?",
+        "prompt_backend": "Git branchlar, commitlar va PR ko‘rib chiqish bo‘yicha texnik talablar qanday?",
+        "prompt_onboard": "Yangi xodim birinchi 3 kunlik onboarding davrida nimalarni bajarishi kerak?",
+        "prompt_security": "2FA (Ikki bosqichli autentifikatsiya) va parollar xavfsizligi bo‘yicha majburiy qoidalar nimalardan iborat?",
+        "verified_sources": "📎 Tasdiqlangan Manbalar:",
+        "input_placeholder": "Kompaniya qoidalari yoki texnik qo‘llanmalar bo‘yicha savolingizni yozing...",
+        "searching": "Hujjatlar o‘rganilmoqda va asosli javob tayyorlanmoqda...",
+        "page": "Sahifa",
+    },
+    "en": {
+        "page_title": "Company Knowledge Base | AI Assistant",
+        "control_center": "⚙️ Control Center",
+        "language_select": "🌐 Language / Tilni tanlang",
+        "index_status": "📊 Index Status",
+        "index_active": "✅ FAISS Vector Index Active",
+        "no_index": "⚠️ No Vector Index Found",
+        "chunks": "Chunks",
+        "sources": "Sources",
+        "updated": "Updated",
+        "add_docs": "📥 Add Documents",
+        "upload_label": "Upload policy or guides",
+        "saved_msg": "file(s) saved to `documents/`.",
+        "reindex_btn": "🔄 Re-index Knowledge Base",
+        "available_docs": "📁 Available Docs",
+        "model_settings": "🎛️ Retrieval & Model Settings",
+        "llm_model": "LLM Model",
+        "temp": "Creativity (Temperature)",
+        "top_k": "Top-K Chunks",
+        "search_algo": "Search Algorithm",
+        "clear_chat": "🧹 Clear Conversation",
+        "main_title": "🏢 Company Knowledge Base AI",
+        "sub_title": "Internal AI assistant answering employee questions strictly grounded in company handbooks, standards, and policies.",
+        "q_vacation": "🌴 Vacation Policy",
+        "q_backend": "💻 Backend Standards",
+        "q_onboard": "🚀 Onboarding Process",
+        "q_security": "🔐 IT Security Rules",
+        "prompt_vacation": "How many annual vacation days do employees get, and how do I request time off?",
+        "prompt_backend": "What are our engineering standards for git branches, commits, and API errors?",
+        "prompt_onboard": "What steps should a new employee complete during their first week?",
+        "prompt_security": "What are the rules regarding password security, 2FA, and device access?",
+        "verified_sources": "📎 Verified Sources:",
+        "input_placeholder": "Ask any question regarding company policies or engineering guidelines...",
+        "searching": "Searching documents & generating grounded response...",
+        "page": "Page",
+    }
+}
+
+
 def main():
     # --- Sidebar ---
-    st.sidebar.title("⚙️ Control Center")
+    # Language Selector at top of sidebar
+    selected_lang_label = st.sidebar.selectbox(
+        "🌐 Til / Language",
+        options=["🇺🇿 O'zbekcha", "🇬🇧 English"],
+        index=0,
+    )
+    lang_code = "uz" if "O'zbekcha" in selected_lang_label else "en"
+    t = I18N[lang_code]
+
+    st.sidebar.title(t["control_center"])
 
     # Status & Index Info
     has_index = vectorstore_exists(VECTORSTORE_DIR)
     manifest = get_manifest_stats()
 
-    st.sidebar.markdown("### 📊 Index Status")
+    st.sidebar.markdown(f"### {t['index_status']}")
     if has_index:
-        st.sidebar.success("✅ FAISS Vector Index Active")
+        st.sidebar.success(t["index_active"])
         if manifest:
             st.sidebar.caption(
-                f"• Chunks: **{manifest.get('total_chunks', 'N/A')}**\n"
-                f"• Sources: **{manifest.get('unique_sources', 'N/A')} files**\n"
-                f"• Updated: `{manifest.get('created_at', '')[:16].replace('T', ' ')}`"
+                f"• {t['chunks']}: **{manifest.get('total_chunks', 'N/A')}**\n"
+                f"• {t['sources']}: **{manifest.get('unique_sources', 'N/A')} files**\n"
+                f"• {t['updated']}: `{manifest.get('created_at', '')[:16].replace('T', ' ')}`"
             )
     else:
-        st.sidebar.warning("⚠️ No Vector Index Found")
+        st.sidebar.warning(t["no_index"])
 
     # Document Uploader in Sidebar
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📥 Add Documents")
+    st.sidebar.markdown(f"### {t['add_docs']}")
     uploaded_files = st.sidebar.file_uploader(
-        "Upload policy or guides",
+        t["upload_label"],
         type=[ext.lstrip(".") for ext in SUPPORTED_EXTENSIONS],
         accept_multiple_files=True,
     )
@@ -185,52 +271,52 @@ def main():
             if not target_path.exists():
                 with open(target_path, "wb") as f:
                     f.write(uf.getbuffer())
-        st.sidebar.info(f"{len(uploaded_files)} file(s) saved to `documents/`.")
+        st.sidebar.info(f"{len(uploaded_files)} {t['saved_msg']}")
 
-    if st.sidebar.button("🔄 Re-index Knowledge Base", use_container_width=True):
+    if st.sidebar.button(t["reindex_btn"], use_container_width=True):
         if run_ingestion_in_ui():
             st.rerun()
 
     # Document list preview
     existing_docs = [p.name for p in DOCUMENTS_DIR.glob("*") if p.is_file() and not p.name.startswith(".")]
-    with st.sidebar.expander(f"📁 Available Docs ({len(existing_docs)})"):
+    with st.sidebar.expander(f"{t['available_docs']} ({len(existing_docs)})"):
         for name in sorted(existing_docs):
             st.caption(f"• `{name}`")
 
     # Model & Retrieval Settings
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 🎛️ Retrieval & Model")
+    st.sidebar.markdown(f"### {t['model_settings']}")
     selected_model = st.sidebar.selectbox(
-        "LLM Model",
-        options=["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"],
+        t["llm_model"],
+        options=["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"],
         index=0,
     )
-    selected_temp = st.sidebar.slider("Temperature", 0.0, 1.0, TEMPERATURE, 0.05)
-    selected_top_k = st.sidebar.slider("Top-K Chunks", 1, 10, TOP_K_RETRIEVAL, 1)
-    selected_search = st.sidebar.radio("Search Algorithm", ["similarity", "mmr"], horizontal=True)
+    selected_temp = st.sidebar.slider(t["temp"], 0.0, 1.0, TEMPERATURE, 0.05)
+    selected_top_k = st.sidebar.slider(t["top_k"], 1, 10, TOP_K_RETRIEVAL, 1)
+    selected_search = st.sidebar.radio(t["search_algo"], ["similarity", "mmr"], horizontal=True)
 
-    if st.sidebar.button("🧹 Clear Conversation", use_container_width=True):
+    if st.sidebar.button(t["clear_chat"], use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
     # --- Main Chat UI ---
-    st.markdown('<div class="main-title">🏢 Company Knowledge Base AI</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="main-title">{t["main_title"]}</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="sub-title">Internal AI assistant answering employee questions strictly grounded in company handbooks, standards, and policies.</div>',
+        f'<div class="sub-title">{t["sub_title"]}</div>',
         unsafe_allow_html=True,
     )
 
     # Sample Quick Questions
     col1, col2, col3, col4 = st.columns(4)
     quick_prompt = None
-    if col1.button("🌴 Vacation Policy", use_container_width=True):
-        quick_prompt = "How many annual vacation days do employees get, and how do I request time off?"
-    if col2.button("💻 Backend Standards", use_container_width=True):
-        quick_prompt = "What are our engineering standards for git branches, commits, and API errors?"
-    if col3.button("🚀 Onboarding Process", use_container_width=True):
-        quick_prompt = "What steps should a new employee complete during their first week?"
-    if col4.button("🔐 IT Security Rules", use_container_width=True):
-        quick_prompt = "What are the rules regarding password security, 2FA, and device access?"
+    if col1.button(t["q_vacation"], use_container_width=True):
+        quick_prompt = t["prompt_vacation"]
+    if col2.button(t["q_backend"], use_container_width=True):
+        quick_prompt = t["prompt_backend"]
+    if col3.button(t["q_onboard"], use_container_width=True):
+        quick_prompt = t["prompt_onboard"]
+    if col4.button(t["q_security"], use_container_width=True):
+        quick_prompt = t["prompt_security"]
 
     # Chat history state
     if "messages" not in st.session_state:
@@ -241,16 +327,16 @@ def main():
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             if msg.get("sources"):
-                st.markdown("**📎 Verified Sources:**")
+                st.markdown(f"**{t['verified_sources']}**")
                 for s in msg["sources"]:
                     fn = s.metadata.get("filename") or Path(s.metadata.get("source", "Unknown")).name
                     page = s.metadata.get("page")
-                    label = f"📄 `{fn}`" + (f" — Page {page}" if page else "")
+                    label = f"📄 `{fn}`" + (f" — {t['page']} {page}" if page else "")
                     with st.expander(label):
                         st.markdown(f"> *{s.page_content[:450]}...*")
 
     # Handle input prompt
-    user_query = st.chat_input("Ask any question regarding company policies or engineering guidelines...")
+    user_query = st.chat_input(t["input_placeholder"])
     prompt_to_run = quick_prompt or user_query
 
     if prompt_to_run:
@@ -271,18 +357,23 @@ def main():
             if err:
                 st.error(err)
             else:
-                with st.spinner("Searching documents & generating grounded response..."):
+                with st.spinner(t["searching"]):
                     try:
-                        answer, sources = rag_pipeline(prompt_to_run)
+                        # Append language guidance if user language is Uzbek
+                        effective_prompt = prompt_to_run
+                        if lang_code == "uz" and not any(w in prompt_to_run.lower() for w in ["in english", "english please"]):
+                            effective_prompt = f"{prompt_to_run}\n(Iltimos, javobni o'zbek tilida, professional va aniq shaklda taqdim eting)."
+
+                        answer, sources = rag_pipeline(effective_prompt)
                         st.markdown(answer)
 
                         if sources:
                             st.markdown("---")
-                            st.markdown("**📎 Verified Sources:**")
+                            st.markdown(f"**{t['verified_sources']}**")
                             for s in sources:
                                 fn = s.metadata.get("filename") or Path(s.metadata.get("source", "Unknown")).name
                                 page = s.metadata.get("page")
-                                label = f"📄 `{fn}`" + (f" — Page {page}" if page else "")
+                                label = f"📄 `{fn}`" + (f" — {t['page']} {page}" if page else "")
                                 with st.expander(label):
                                     st.markdown(f"> *{s.page_content[:450]}...*")
 
