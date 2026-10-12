@@ -1,58 +1,77 @@
 """
-Company Knowledge Base RAG Chatbot — Streamlit Chat UI.
+Company Knowledge Base RAG Chatbot — Enterprise Streamlit Interface.
 Run: streamlit run app.py
 """
 
-import streamlit as st
-from pathlib import Path
-
-# Project root
-project_root = Path(__file__).resolve().parent
-
-# Load environment
-from dotenv import load_dotenv
-
-load_dotenv(project_root / ".env")
-
 import sys
+import json
+from pathlib import Path
+from typing import List, Dict, Any, Optional
 
-sys.path.insert(0, str(project_root))
+import streamlit as st
+
+# Setup project path
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
 from config import (
+    DOCUMENTS_DIR,
     VECTORSTORE_DIR,
+    MANIFEST_FILE,
     TOP_K_RETRIEVAL,
+    SEARCH_TYPE,
     GOOGLE_API_KEY,
     LLM_MODEL,
     EMBEDDING_MODEL,
+    TEMPERATURE,
 )
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from src.vectorstore import load_vectorstore
+from src.vectorstore import load_vectorstore, vectorstore_exists, create_vectorstore
 from src.retriever import get_retriever
-from src.chain import create_rag_chain, create_rag_chain_with_sources
+from src.chain import create_rag_chain_with_sources
+from src.document_loader import load_documents_from_directory, SUPPORTED_EXTENSIONS
+from src.chunker import chunk_documents
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
-
-# Page config
+# Page Setup
 st.set_page_config(
-    page_title="Company Knowledge Base",
-    page_icon="📚",
-    layout="centered",
+    page_title="Company Knowledge Base | AI Assistant",
+    page_icon="🏢",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-# Custom styles
+# Custom Styling
 st.markdown(
     """
     <style>
-    .source-box {
-        background-color: #f0f2f6;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
+    .main-title {
+        font-size: 2.1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.2rem;
     }
-    .source-title {
+    .sub-title {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin-bottom: 1.5rem;
+    }
+    .source-badge {
+        display: inline-block;
+        background: #0284c7;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
         font-weight: 600;
-        color: #1f77b4;
-        margin-bottom: 0.25rem;
+        margin-right: 6px;
+    }
+    .status-card {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid #1e293b;
+        margin-bottom: 16px;
     }
     </style>
     """,
@@ -60,98 +79,221 @@ st.markdown(
 )
 
 
-@st.cache_resource
-def load_rag():
-    """Load vector store and RAG components (cached)."""
+def get_manifest_stats() -> Dict[str, Any]:
+    """Read index manifest if available."""
+    if MANIFEST_FILE.exists():
+        try:
+            with open(MANIFEST_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+
+@st.cache_resource(show_spinner=False)
+def load_rag_pipeline(model_name: str, temp: float, top_k: int, search_mode: str):
+    """Load vector store and RAG pipeline with caching."""
     if not GOOGLE_API_KEY:
-        st.error("GOOGLE_API_KEY not set. Add it to .env")
-        st.stop()
+        return None, "GOOGLE_API_KEY not found. Please set it in .env or environment variables."
 
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model=EMBEDDING_MODEL,
-        google_api_key=GOOGLE_API_KEY,
-        transport="rest",
-        request_timeout=60,
-    )
+    if not vectorstore_exists(VECTORSTORE_DIR):
+        return None, "Vector index not found. Ingest documents first using the sidebar or CLI."
 
-    index_path = VECTORSTORE_DIR / "index.faiss"
-    if not index_path.exists():
-        st.warning(
-            "Vector store not found. Run ingestion first:\n\n"
-            "```\npython scripts/ingest.py\n```\n\n"
-            "Place documents in the `documents/` folder."
+    try:
+        embeddings = GoogleGenerativeAIEmbeddings(
+            model=EMBEDDING_MODEL,
+            google_api_key=GOOGLE_API_KEY,
+            transport="rest",
+            request_timeout=90,
         )
-        st.stop()
+        vectorstore = load_vectorstore(VECTORSTORE_DIR, embeddings)
+        retriever = get_retriever(vectorstore, top_k=top_k, search_type=search_mode)
 
-    vectorstore = load_vectorstore(VECTORSTORE_DIR, embeddings)
-    retriever = get_retriever(vectorstore, top_k=TOP_K_RETRIEVAL)
-    llm = ChatGoogleGenerativeAI(
-        model=LLM_MODEL,
-        google_api_key=GOOGLE_API_KEY,
-        temperature=0,
-        transport="rest",
-        request_timeout=60,
-    )
-    chain = create_rag_chain(llm, retriever)
-    rag_with_sources = create_rag_chain_with_sources(llm, retriever)
+        llm = ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=GOOGLE_API_KEY,
+            temperature=temp,
+            transport="rest",
+            request_timeout=90,
+        )
 
-    return rag_with_sources, retriever
+        rag_with_sources = create_rag_chain_with_sources(llm, retriever)
+        return rag_with_sources, None
+    except Exception as e:
+        return None, f"Failed to initialize RAG pipeline: {str(e)}"
+
+
+def run_ingestion_in_ui() -> bool:
+    """Run document loading, chunking, and embedding from UI."""
+    if not GOOGLE_API_KEY:
+        st.sidebar.error("Set GOOGLE_API_KEY before running ingestion.")
+        return False
+
+    with st.spinner("Indexing documents into FAISS vector store..."):
+        try:
+            docs = load_documents_from_directory(DOCUMENTS_DIR)
+            if not docs:
+                st.sidebar.warning(f"No files in {DOCUMENTS_DIR.name}/ to index.")
+                return False
+
+            chunks = chunk_documents(docs)
+            embeddings = GoogleGenerativeAIEmbeddings(
+                model=EMBEDDING_MODEL,
+                google_api_key=GOOGLE_API_KEY,
+                transport="rest",
+            )
+            create_vectorstore(chunks, embeddings, VECTORSTORE_DIR)
+            st.cache_resource.clear()
+            st.sidebar.success(f"Indexed {len(chunks)} chunks across {len(docs)} files!")
+            return True
+        except Exception as e:
+            st.sidebar.error(f"Ingestion failed: {e}")
+            return False
 
 
 def main():
-    st.title("📚 Company Knowledge Base")
-    st.caption("Ask questions about company documents (vacation policy, coding standards, onboarding, etc.)")
+    # --- Sidebar ---
+    st.sidebar.title("⚙️ Control Center")
 
-    # Initialize chat history
+    # Status & Index Info
+    has_index = vectorstore_exists(VECTORSTORE_DIR)
+    manifest = get_manifest_stats()
+
+    st.sidebar.markdown("### 📊 Index Status")
+    if has_index:
+        st.sidebar.success("✅ FAISS Vector Index Active")
+        if manifest:
+            st.sidebar.caption(
+                f"• Chunks: **{manifest.get('total_chunks', 'N/A')}**\n"
+                f"• Sources: **{manifest.get('unique_sources', 'N/A')} files**\n"
+                f"• Updated: `{manifest.get('created_at', '')[:16].replace('T', ' ')}`"
+            )
+    else:
+        st.sidebar.warning("⚠️ No Vector Index Found")
+
+    # Document Uploader in Sidebar
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 📥 Add Documents")
+    uploaded_files = st.sidebar.file_uploader(
+        "Upload policy or guides",
+        type=[ext.lstrip(".") for ext in SUPPORTED_EXTENSIONS],
+        accept_multiple_files=True,
+    )
+
+    if uploaded_files:
+        for uf in uploaded_files:
+            target_path = DOCUMENTS_DIR / uf.name
+            if not target_path.exists():
+                with open(target_path, "wb") as f:
+                    f.write(uf.getbuffer())
+        st.sidebar.info(f"{len(uploaded_files)} file(s) saved to `documents/`.")
+
+    if st.sidebar.button("🔄 Re-index Knowledge Base", use_container_width=True):
+        if run_ingestion_in_ui():
+            st.rerun()
+
+    # Document list preview
+    existing_docs = [p.name for p in DOCUMENTS_DIR.glob("*") if p.is_file() and not p.name.startswith(".")]
+    with st.sidebar.expander(f"📁 Available Docs ({len(existing_docs)})"):
+        for name in sorted(existing_docs):
+            st.caption(f"• `{name}`")
+
+    # Model & Retrieval Settings
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🎛️ Retrieval & Model")
+    selected_model = st.sidebar.selectbox(
+        "LLM Model",
+        options=["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"],
+        index=0,
+    )
+    selected_temp = st.sidebar.slider("Temperature", 0.0, 1.0, TEMPERATURE, 0.05)
+    selected_top_k = st.sidebar.slider("Top-K Chunks", 1, 10, TOP_K_RETRIEVAL, 1)
+    selected_search = st.sidebar.radio("Search Algorithm", ["similarity", "mmr"], horizontal=True)
+
+    if st.sidebar.button("🧹 Clear Conversation", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+
+    # --- Main Chat UI ---
+    st.markdown('<div class="main-title">🏢 Company Knowledge Base AI</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sub-title">Internal AI assistant answering employee questions strictly grounded in company handbooks, standards, and policies.</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Sample Quick Questions
+    col1, col2, col3, col4 = st.columns(4)
+    quick_prompt = None
+    if col1.button("🌴 Vacation Policy", use_container_width=True):
+        quick_prompt = "How many annual vacation days do employees get, and how do I request time off?"
+    if col2.button("💻 Backend Standards", use_container_width=True):
+        quick_prompt = "What are our engineering standards for git branches, commits, and API errors?"
+    if col3.button("🚀 Onboarding Process", use_container_width=True):
+        quick_prompt = "What steps should a new employee complete during their first week?"
+    if col4.button("🔐 IT Security Rules", use_container_width=True):
+        quick_prompt = "What are the rules regarding password security, 2FA, and device access?"
+
+    # Chat history state
     if "messages" not in st.session_state:
         st.session_state.messages = []
-
-    # Load RAG
-    rag_with_sources, _ = load_rag()
 
     # Display chat history
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             if msg.get("sources"):
-                st.markdown("**Sources:**")
+                st.markdown("**📎 Verified Sources:**")
                 for s in msg["sources"]:
-                    source_path = s.metadata.get("source", "Unknown")
-                    page = s.metadata.get("page", "")
-                    label = f"{Path(source_path).name}" + (f" (p.{page})" if page else "")
+                    fn = s.metadata.get("filename") or Path(s.metadata.get("source", "Unknown")).name
+                    page = s.metadata.get("page")
+                    label = f"📄 `{fn}`" + (f" — Page {page}" if page else "")
                     with st.expander(label):
-                        st.text(s.page_content[:500] + ("..." if len(s.page_content) > 500 else ""))
+                        st.markdown(f"> *{s.page_content[:450]}...*")
 
-    # Chat input
-    if prompt := st.chat_input("Ask a question..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
+    # Handle input prompt
+    user_query = st.chat_input("Ask any question regarding company policies or engineering guidelines...")
+    prompt_to_run = quick_prompt or user_query
 
+    if prompt_to_run:
+        # Append user message
+        st.session_state.messages.append({"role": "user", "content": prompt_to_run})
         with st.chat_message("user"):
-            st.markdown(prompt)
+            st.markdown(prompt_to_run)
 
+        # Generate Assistant Response
         with st.chat_message("assistant"):
-            with st.spinner("Searching documents..."):
-                try:
-                    answer, sources = rag_with_sources(prompt)
-                    st.markdown(answer)
-                    sources = sources or []
-                    if sources:
-                        st.markdown("---")
-                        st.markdown("**📎 Sources:**")
-                        for doc in sources:
-                            source_path = doc.metadata.get("source", "Unknown")
-                            page = doc.metadata.get("page", "")
-                            label = f"`{Path(source_path).name}`" + (f" (page {page})" if page else "")
-                            with st.expander(label):
-                                st.text(doc.page_content[:500] + ("..." if len(doc.page_content) > 500 else ""))
-                    st.session_state.messages.append({
-                        "role": "assistant",
-                        "content": answer,
-                        "sources": sources,
-                    })
-                except Exception as e:
-                    st.error(f"Error: {e}")
-                    sources = []
+            rag_pipeline, err = load_rag_pipeline(
+                model_name=selected_model,
+                temp=selected_temp,
+                top_k=selected_top_k,
+                search_mode=selected_search,
+            )
+
+            if err:
+                st.error(err)
+            else:
+                with st.spinner("Searching documents & generating grounded response..."):
+                    try:
+                        answer, sources = rag_pipeline(prompt_to_run)
+                        st.markdown(answer)
+
+                        if sources:
+                            st.markdown("---")
+                            st.markdown("**📎 Verified Sources:**")
+                            for s in sources:
+                                fn = s.metadata.get("filename") or Path(s.metadata.get("source", "Unknown")).name
+                                page = s.metadata.get("page")
+                                label = f"📄 `{fn}`" + (f" — Page {page}" if page else "")
+                                with st.expander(label):
+                                    st.markdown(f"> *{s.page_content[:450]}...*")
+
+                        st.session_state.messages.append({
+                            "role": "assistant",
+                            "content": answer,
+                            "sources": sources,
+                        })
+                    except Exception as e:
+                        st.error(f"Error executing query: {str(e)}")
 
 
 if __name__ == "__main__":

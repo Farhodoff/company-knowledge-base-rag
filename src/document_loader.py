@@ -1,74 +1,110 @@
 """
-Document Loader — Loads documents from PDF, Markdown, TXT, and Notion exports.
-Uses LangChain document loaders with metadata for source tracking.
+Document Loader — Loads documents from PDF, Markdown, TXT, DOCX, and CSV formats.
+Enriches each document with source metadata for precise citations.
 """
 
+import logging
 from pathlib import Path
 from typing import List
 
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_core.documents import Document
+from langchain_community.document_loaders import PyPDFLoader, TextLoader, CSVLoader
+
+logger = logging.getLogger(__name__)
+
+SUPPORTED_EXTENSIONS = {".pdf", ".md", ".markdown", ".txt", ".csv", ".docx"}
 
 
 def load_document(file_path: Path) -> List[Document]:
     """
-    Load a single document based on file extension.
+    Load a single document based on file extension with source tracking.
 
     Args:
-        file_path: Path to the document file.
+        file_path: Path to the target document.
 
     Returns:
-        List of Document objects with content and metadata.
+        List of Document objects with clean content and metadata.
     """
+    if not file_path.exists():
+        raise FileNotFoundError(f"Document file does not exist: {file_path}")
+
     suffix = file_path.suffix.lower()
+    base_meta = {
+        "source": str(file_path),
+        "filename": file_path.name,
+        "extension": suffix,
+        "size_bytes": file_path.stat().st_size,
+    }
 
     if suffix == ".pdf":
         loader = PyPDFLoader(str(file_path))
         docs = loader.load()
-        # Add source path to metadata for each page
         for i, doc in enumerate(docs):
-            doc.metadata["source"] = str(file_path)
+            doc.metadata.update(base_meta)
             doc.metadata["page"] = i + 1
         return docs
 
-    if suffix in (".md", ".markdown"):
+    if suffix in (".md", ".markdown", ".txt"):
         loader = TextLoader(str(file_path), encoding="utf-8", autodetect_encoding=True)
         docs = loader.load()
         for doc in docs:
-            doc.metadata["source"] = str(file_path)
+            doc.metadata.update(base_meta)
+            doc.metadata["page"] = 1
         return docs
 
-    if suffix == ".txt":
-        loader = TextLoader(str(file_path), encoding="utf-8", autodetect_encoding=True)
+    if suffix == ".csv":
+        loader = CSVLoader(str(file_path), encoding="utf-8")
         docs = loader.load()
-        for doc in docs:
-            doc.metadata["source"] = str(file_path)
+        for i, doc in enumerate(docs):
+            doc.metadata.update(base_meta)
+            doc.metadata["row"] = i + 1
+            doc.metadata["page"] = 1
         return docs
 
-    raise ValueError(f"Unsupported file type: {suffix}")
+    if suffix == ".docx":
+        try:
+            from langchain_community.document_loaders import Docx2txtLoader
+            loader = Docx2txtLoader(str(file_path))
+            docs = loader.load()
+            for doc in docs:
+                doc.metadata.update(base_meta)
+                doc.metadata["page"] = 1
+            return docs
+        except ImportError:
+            # Fallback if docx2txt is not installed
+            logger.warning("docx2txt not installed; skipping %s", file_path.name)
+            return []
+
+    raise ValueError(f"Unsupported document format '{suffix}'. Supported: {SUPPORTED_EXTENSIONS}")
 
 
 def load_documents_from_directory(directory: Path) -> List[Document]:
     """
-    Load all supported documents from a directory (recursive).
-
-    Supported: .pdf, .md, .markdown, .txt
+    Scan and load all supported documents recursively from a directory.
+    Skips unreadable or corrupted files gracefully without aborting the batch.
 
     Args:
-        directory: Path to directory containing documents.
+        directory: Path to folder containing source documents.
 
     Returns:
-        List of Document objects from all files.
+        Aggregated list of loaded Document objects.
     """
-    supported = {".pdf", ".md", ".markdown", ".txt"}
-    all_docs: List[Document] = []
+    if not directory.exists() or not directory.is_dir():
+        logger.warning("Directory %s does not exist or is not a directory.", directory)
+        return []
 
-    for file_path in directory.rglob("*"):
-        if file_path.is_file() and file_path.suffix.lower() in supported:
-            try:
-                docs = load_document(file_path)
-                all_docs.extend(docs)
-            except Exception as e:
-                print(f"Warning: Failed to load {file_path}: {e}")
+    all_docs: List[Document] = []
+    supported_files = [
+        p for p in directory.rglob("*")
+        if p.is_file() and p.suffix.lower() in SUPPORTED_EXTENSIONS and not p.name.startswith(".")
+    ]
+
+    for file_path in sorted(supported_files):
+        try:
+            docs = load_document(file_path)
+            all_docs.extend(docs)
+            logger.info("Successfully loaded %s (%d document segment/pages)", file_path.name, len(docs))
+        except Exception as exc:
+            logger.error("Failed to load document %s: %s", file_path, exc)
 
     return all_docs
