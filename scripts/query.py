@@ -30,21 +30,17 @@ from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmb
 def main():
     parser = argparse.ArgumentParser(description="Query the company knowledge base from CLI.")
     parser.add_argument("question", type=str, nargs="?", help="Question to ask the AI assistant.")
+    parser.add_argument("--query", "-q", type=str, dest="query_flag", help="Question query flag.")
     parser.add_argument("--top-k", type=int, default=TOP_K_RETRIEVAL, help="Number of retrieved chunks.")
     parser.add_argument("--model", type=str, default=LLM_MODEL, help="Gemini chat model.")
+    parser.add_argument("--mock", "--dry-run", action="store_true", help="Simulate retrieval and response for offline testing.")
     args = parser.parse_args()
 
-    if not GOOGLE_API_KEY:
-        print("\n❌ Error: GOOGLE_API_KEY is not set in environment or .env file.")
-        sys.exit(1)
-
-    if not vectorstore_exists(VECTORSTORE_DIR):
-        print(f"\n❌ Error: Vector store not found at {VECTORSTORE_DIR}")
-        print("Run ingestion first: python scripts/ingest.py\n")
-        sys.exit(1)
+    question = args.question or args.query_flag
+    if not question and not sys.stdin.isatty():
+        question = sys.stdin.read().strip()
 
     # Interactive prompt if no question argument passed
-    question = args.question
     if not question:
         try:
             question = input("\n💬 Enter your question: ").strip()
@@ -55,6 +51,29 @@ def main():
     if not question:
         print("No question provided.")
         sys.exit(0)
+
+    if args.mock:
+        print(f"\n🧪 [MOCK MODE] Simulating RAG retrieval for: \"{question}\" (top_k={args.top_k})...\n")
+        print("=" * 60)
+        print("💡 Answer (Mock Simulation):")
+        print(f"Based on internal documents, full-time employees receive 24 days of paid time off (PTO) annually.")
+        print("All leave requests must be submitted at least 2 weeks in advance via BambooHR.")
+        print("=" * 60)
+        print("\n📚 Sources:")
+        print("  • sample_vacation_policy.md (Page 1)")
+        print("    Excerpt: 'All full-time employees accrue 24 days of PTO per calendar year...'")
+        print("=" * 60)
+        return
+
+    if not GOOGLE_API_KEY:
+        print("\n❌ Error: GOOGLE_API_KEY is not set in environment or .env file.")
+        print("Tip: You can run with `--mock` to verify the CLI pipeline without an API key.\n")
+        sys.exit(1)
+
+    if not vectorstore_exists(VECTORSTORE_DIR):
+        print(f"\n❌ Error: Vector store not found at {VECTORSTORE_DIR}")
+        print("Run ingestion first: python scripts/ingest.py\n")
+        sys.exit(1)
 
     print(f"\n🔍 Searching knowledge base for: \"{question}\" (top_k={args.top_k}, model={args.model})...\n")
 

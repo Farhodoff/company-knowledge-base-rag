@@ -78,3 +78,13 @@ def test_format_docs_citation():
     assert "[Source: vacation.md (Page 1)]" in formatted
     assert "[Source: git.md (Page 3)]" in formatted
     assert "PTO is 24 days." in formatted
+
+
+def test_cli_mock_query_execution():
+    """Verify CLI tool executes successfully with mock/dry-run flag."""
+    import subprocess
+    cmd = [sys.executable, str(PROJECT_ROOT / "scripts" / "query.py"), "--mock", "--query", "Vacation policy?"]
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+    assert result.returncode == 0
+    assert "MOCK MODE" in result.stdout
+    assert "sample_vacation_policy.md" in result.stdout
