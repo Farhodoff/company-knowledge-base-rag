@@ -22,8 +22,8 @@ VECTORSTORE_DIR.mkdir(exist_ok=True, parents=True)
 
 # Google Gemini API & Model Configuration
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "models/text-embedding-004")
-LLM_MODEL = os.getenv("LLM_MODEL", "gemini-1.5-flash")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "models/gemini-embedding-001")
+LLM_MODEL = os.getenv("LLM_MODEL", "gemini-2.5-flash")
 TEMPERATURE = float(os.getenv("TEMPERATURE", "0.2"))
 
 # RAG Splitting & Retrieval Parameters

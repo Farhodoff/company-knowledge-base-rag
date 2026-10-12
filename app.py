@@ -113,7 +113,6 @@ def load_rag_pipeline(model_name: str, temp: float, top_k: int, search_mode: str
             model=model_name,
             google_api_key=GOOGLE_API_KEY,
             temperature=temp,
-            transport="rest",
             request_timeout=90,
         )
 

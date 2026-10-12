@@ -186,8 +186,30 @@ case "$1" in
         echo "🌐 Starting Webhook server..."
         cd "$APP_DIR" && "$VENV_PYTHON" src/integrations/webhook_server.py "$@"
         ;;
-    config|env)
-        "${EDITOR:-nano}" "$APP_DIR/.env"
+    config|set-key|key|env)
+        shift
+        KEY="$1"
+        if [ "$KEY" = "--edit" ]; then
+            "${EDITOR:-nano}" "$APP_DIR/.env"
+            exit 0
+        fi
+        if [ -z "$KEY" ]; then
+            echo -n "🔑 Enter your Google Gemini API key: "
+            read -r KEY
+        fi
+        if [ -n "$KEY" ]; then
+            touch "$APP_DIR/.env"
+            if grep -q "^GOOGLE_API_KEY=" "$APP_DIR/.env" 2>/dev/null; then
+                sed -i '' "s|^GOOGLE_API_KEY=.*|GOOGLE_API_KEY=$KEY|" "$APP_DIR/.env" 2>/dev/null || sed -i "s|^GOOGLE_API_KEY=.*|GOOGLE_API_KEY=$KEY|" "$APP_DIR/.env"
+            else
+                echo "GOOGLE_API_KEY=$KEY" >> "$APP_DIR/.env"
+            fi
+            echo "✅ Google API Key saved successfully to $APP_DIR/.env!"
+            echo "🔄 Indexing documents into FAISS vector store..."
+            cd "$APP_DIR" && "$VENV_PYTHON" scripts/ingest.py
+        else
+            echo "❌ No API key provided."
+        fi
         ;;
     update)
         echo "🔄 Updating Company Knowledge Base RAG..."

@@ -89,7 +89,6 @@ def main():
         model=args.model,
         google_api_key=GOOGLE_API_KEY,
         temperature=TEMPERATURE,
-        transport="rest",
     )
 
     rag = create_rag_chain_with_sources(llm, retriever)

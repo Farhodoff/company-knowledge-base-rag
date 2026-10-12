@@ -48,7 +48,6 @@ def get_rag_runner():
         model=LLM_MODEL,
         google_api_key=GOOGLE_API_KEY,
         temperature=TEMPERATURE,
-        transport="rest",
     )
     return create_rag_chain_with_sources(llm, retriever)
 
