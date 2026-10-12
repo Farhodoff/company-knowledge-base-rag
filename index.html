@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company Knowledge Base RAG — Enterprise AI Assistant for Internal Documents</title>
+  <meta name="description" content="Local-first, enterprise-grade AI chatbot grounded strictly in internal company policies, handbooks, and engineering guidelines using LangChain, Google Gemini, and FAISS." />
+  <meta name="keywords" content="RAG, Retrieval Augmented Generation, LangChain, Google Gemini, FAISS, Vector Database, Company Knowledge Base, Streamlit, Slack Bot, Discord Bot" />
+  <meta name="author" content="Farhod" />
+  
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:title" content="Company Knowledge Base RAG" />
+  <meta property="og:description" content="Grounded internal AI knowledge assistant for enterprise documentation with verified citations." />
+  <meta property="og:image" content="assets/rag_hero_banner.png" />
+  <meta property="og:url" content="https://farhodoff.github.io/company-knowledge-base-rag/" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(56, 189, 248, 0.15);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.35);
+      --purple: #c084fc;
+      --emerald: #34d399;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --terminal-bg: #030712;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(192, 132, 252, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(52, 211, 153, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(7, 9, 14, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #0284c7, #9333ea);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    .btn-gh {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-gh:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 90px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    }
+    .badge-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    .hero-title {
+      font-size: 3.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 36px;
+      font-weight: 400;
+    }
+
+    /* Terminal Install Box */
+    .terminal-box {
+      max-width: 720px;
+      margin: 0 auto 44px;
+      background: var(--terminal-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.1);
+      position: relative;
+    }
+    .terminal-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .terminal-prompt {
+      color: var(--emerald);
+      user-select: none;
+      font-weight: 700;
+    }
+    .terminal-cmd {
+      color: #f1f5f9;
+    }
+    .btn-copy {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .btn-copy:hover {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 16px var(--primary);
+    }
+
+    /* CTA Buttons */
+    .cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      padding: 13px 26px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.96rem;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.5);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 13px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.96rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Banner Preview */
+    .hero-banner-wrap {
+      max-width: 1060px;
+      margin: 50px auto 0;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15);
+      background: #020617;
+    }
+    .hero-banner-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Section Headers */
+    .section {
+      padding: 80px 0;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 50px;
+    }
+    .section-tag {
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Interactive Simulator */
+    .simulator-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+    }
+    .demo-prompts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .demo-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .demo-btn:hover, .demo-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .chat-bubble-user {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      font-weight: 500;
+      color: #e2e8f0;
+    }
+    .chat-bubble-ai {
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+    .ai-body {
+      color: #cbd5e1;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .citation-block {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: #94a3b8;
+    }
+    .citation-tag {
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    /* Feature Grid */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .card-feature {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.25s;
+    }
+    .card-feature:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(56, 189, 248, 0.1);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    .card-feature h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .card-feature p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.55;
+    }
+
+    /* macOS Native Section */
+    .macos-section {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(7, 9, 14, 0.9) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+    .code-window {
+      background: #020617;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 14px;
+      overflow: hidden;
+      max-width: 820px;
+      margin: 0 auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .code-topbar {
+      background: #0b1120;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .circle {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .c-red { background: #ef4444; }
+    .c-yellow { background: #f59e0b; }
+    .c-green { background: #10b981; }
+    .code-topbar-title {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: 12px;
+    }
+    .code-pre {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.4rem; }
+      .nav-links { display: none; }
+      .terminal-box { flex-direction: column; gap: 12px; align-items: stretch; }
+      .btn-copy { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#" class="brand">
+        <div class="brand-icon">🏢</div>
+        <span>Company RAG</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#macos">macOS Install</a>
+        <a href="#integrations">Integrations</a>
+        <a href="https://github.com/Farhodoff/company-knowledge-base-rag" target="_blank" class="btn-gh">
+          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          GitHub ★ Star
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge-pill">
+        <span class="badge-pulse"></span>
+        Enterprise Local-First RAG • Google Gemini & FAISS
+      </div>
+      <h1 class="hero-title">
+        Turn Company Docs into<br /><span>Instant, Truthful Answers</span>
+      </h1>
+      <p class="hero-desc">
+        A high-performance AI assistant grounded strictly in internal company policies, handbooks, and engineering guidelines. Answers questions with verifiable document and page citations.
+      </p>
+
+      <!-- One-line terminal installer copy box -->
+      <div class="terminal-box">
+        <div class="terminal-content">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cmd" id="installCmd">curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash</span>
+        </div>
+        <button class="btn-copy" onclick="copyInstallCmd()" id="copyBtn">
+          📋 Copy Command
+        </button>
+      </div>
+
+      <div class="cta-group">
+        <a href="#macos" class="btn-primary">
+           Install on macOS (CLI & App)
+        </a>
+        <a href="#demo" class="btn-secondary">
+          ✨ Test Live Simulator
+        </a>
+      </div>
+
+      <!-- Hero Banner Display -->
+      <div class="hero-banner-wrap">
+        <img src="assets/rag_hero_banner.png" alt="Company Knowledge Base RAG Showcase Banner" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Demo Simulator -->
+  <section class="section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Interactive Simulation</div>
+        <h2 class="section-title">See Grounded Retrieval in Action</h2>
+        <p class="section-desc">Experience how the assistant retrieves specific policy excerpts without hallucinating.</p>
+      </div>
+
+      <div class="simulator-card">
+        <div class="demo-prompts">
+          <span style="font-size: 0.85rem; color: #64748b; align-self: center; margin-right: 6px;">Try Prompts:</span>
+          <button class="demo-btn active" onclick="loadPrompt(0)">🌴 Vacation Policy</button>
+          <button class="demo-btn" onclick="loadPrompt(1)">💻 Backend PR Standards</button>
+          <button class="demo-btn" onclick="loadPrompt(2)">🚀 First Week Onboarding</button>
+          <button class="demo-btn" onclick="loadPrompt(3)">🔐 2FA & IT Security</button>
+        </div>
+
+        <div class="chat-bubble-user" id="userQuestion">
+          💬 How many vacation days do full-time employees receive, and how do I submit a time-off request?
+        </div>
+
+        <div class="chat-bubble-ai">
+          <div class="ai-header">
+            <span>🤖 Assistant Response</span>
+            <span style="font-size: 0.75rem; background: rgba(56, 189, 248, 0.15); padding: 2px 8px; border-radius: 4px;">Grounded Context</span>
+          </div>
+          <div class="ai-body" id="aiAnswer">
+            Full-time employees receive <strong>24 paid vacation days (PTO)</strong> per calendar year, accrued monthly at 2 days per month.<br /><br />
+            To submit a time-off request:
+            <ul style="margin-left: 20px; margin-top: 6px;">
+              <li>Submit your request via the <strong>HR Portal (Deel / BambooHR)</strong> at least <strong>2 weeks in advance</strong> for requests longer than 3 consecutive days.</li>
+              <li>Your squad lead or manager will review and approve within <strong>48 hours</strong>.</li>
+              <li>Up to <strong>5 unused days</strong> may be rolled over into the next year.</li>
+            </ul>
+          </div>
+          <div class="citation-block" id="citationBox">
+            📎 <span class="citation-tag">Verified Source:</span> sample_vacation_policy.md (Page 1) • Section 2: "Accrual & Submission Workflow"
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Showcase -->
+  <section class="section" id="architecture" style="background: rgba(15, 23, 42, 0.3);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">System Design</div>
+        <h2 class="section-title">End-to-End RAG Architecture</h2>
+        <p class="section-desc">Designed with separation of concerns: automated multi-format ingestion, FAISS vector index, and anti-hallucination LCEL chains.</p>
+      </div>
+
+      <div class="hero-banner-wrap" style="margin-top: 0; margin-bottom: 40px;">
+        <img src="assets/rag_architecture_diagram.png" alt="Company Knowledge Base Architecture Diagram" />
+      </div>
+
+      <div class="grid-3">
+        <div class="card-feature">
+          <div class="feature-icon">📥</div>
+          <h3>Multi-Format Ingestion</h3>
+          <p>Parses PDF, Markdown, TXT, DOCX, and CSV files recursively. Preserves metadata including page numbers, file sizes, and chunk indices.</p>
+        </div>
+        <div class="card-feature">
+          <div class="feature-icon">🧠</div>
+          <h3>Gemini & FAISS</h3>
+          <p>Generates high-density embeddings via <code>models/text-embedding-004</code> and stores them in local FAISS vector index files for sub-millisecond retrieval.</p>
+        </div>
+        <div class="card-feature">
+          <div class="feature-icon">🛡️</div>
+          <h3>Strict Anti-Hallucination</h3>
+          <p>System prompts enforce strict grounding. If the answer is not in the company files, the assistant explicitly states it cannot find it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- macOS Native Installation -->
+  <section class="section macos-section" id="macos">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">macOS & Terminal Setup</div>
+        <h2 class="section-title">Install Directly on macOS</h2>
+        <p class="section-desc">Run as a global terminal CLI utility or native macOS Desktop application.</p>
+      </div>
+
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(0)"> 1-Line Installer</button>
+        <button class="tab-btn" onclick="switchTab(1)">💻 Global CLI (company-rag)</button>
+        <button class="tab-btn" onclick="switchTab(2)">🖥️ Native Desktop App</button>
+        <button class="tab-btn" onclick="switchTab(3)">📦 Manual Setup (uv/venv)</button>
+      </div>
+
+      <div class="code-window">
+        <div class="code-topbar">
+          <span class="circle c-red"></span>
+          <span class="circle c-yellow"></span>
+          <span class="circle c-green"></span>
+          <span class="code-topbar-title" id="tabTitle">Terminal — One-Line Auto Installer</span>
+        </div>
+        <pre class="code-pre" id="tabContent"># Run in your macOS terminal:
+curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash
+
+# What this installer does:
+# 1. Sets up ~/.company-rag with isolated virtual environment
+# 2. Creates global 'company-rag' CLI in ~/.local/bin
+# 3. Builds native 'Company Knowledge Base.app' in ~/Applications
+# 4. Indexes default sample documents automatically!</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Integrations -->
+  <section class="section" id="integrations">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Enterprise Ecosystem</div>
+        <h2 class="section-title">Connect to Team Channels</h2>
+        <p class="section-desc">Empower your engineers and employees wherever they work.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card-feature">
+          <div class="feature-icon">💬</div>
+          <h3>Slack Bot (Socket Mode)</h3>
+          <p>Answers <code>@KnowledgeBot</code> mentions directly inside company channels with Block Kit citations. Works behind enterprise firewalls without exposing public ports.</p>
+        </div>
+        <div class="card-feature">
+          <div class="feature-icon">🎮</div>
+          <h3>Discord Bot</h3>
+          <p>Respond to <code>!ask &lt;query&gt;</code> in developer Discord servers with rich Discord Embeds containing answers and source references.</p>
+        </div>
+        <div class="card-feature">
+          <div class="feature-icon">🌐</div>
+          <h3>Universal REST Webhook</h3>
+          <p>Expose a lightweight HTTP API (<code>POST /api/v1/query</code>) for company intranets, HR portals, Zapier, or GitHub Actions automation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin-bottom: 8px;">
+        Designed & Built by <strong><a href="https://github.com/Farhodoff" target="_blank">Farhod</a></strong> • Open Source under MIT License
+      </p>
+      <p style="font-size: 0.82rem; color: #64748b;">
+        Powered by Google Gemini, LangChain, FAISS, and Streamlit • <a href="https://github.com/Farhodoff/company-knowledge-base-rag" target="_blank">View on GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstallCmd() {
+      const cmd = document.getElementById('installCmd').innerText;
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerText = '✅ Copied!';
+        btn.style.background = '#10b981';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+          btn.innerText = '📋 Copy Command';
+          btn.style.background = 'rgba(56, 189, 248, 0.15)';
+          btn.style.color = '#fff';
+        }, 2200);
+      });
+    }
+
+    const DEMO_DATA = [
+      {
+        q: "💬 How many vacation days do full-time employees receive, and how do I submit a time-off request?",
+        a: "Full-time employees receive <strong>24 paid vacation days (PTO)</strong> per calendar year, accrued monthly at 2 days per month.<br /><br />To submit a time-off request:<ul style='margin-left: 20px; margin-top: 6px;'><li>Submit your request via the <strong>HR Portal (Deel / BambooHR)</strong> at least <strong>2 weeks in advance</strong> for requests longer than 3 consecutive days.</li><li>Your squad lead or manager will review and approve within <strong>48 hours</strong>.</li><li>Up to <strong>5 unused days</strong> may be rolled over into the next year.</li></ul>",
+        c: "sample_vacation_policy.md (Page 1) • Section 2: 'Accrual & Submission Workflow'"
+      },
+      {
+        q: "💻 What are our engineering standards for git branches, commits, and PR reviews?",
+        a: "Engineering branch names must follow the format <code>feat/&lt;issue-id&gt;-description</code> or <code>fix/&lt;issue-id&gt;-description</code>.<br /><br />Key PR Standards:<ul style='margin-left: 20px; margin-top: 6px;'><li>Commits must follow Conventional Commits (e.g. <code>feat:</code>, <code>fix:</code>, <code>refactor:</code>).</li><li>Every Pull Request requires at least <strong>1 approving review</strong> from a squad code owner.</li><li>All CI automated tests must pass with zero warnings before merging.</li></ul>",
+        c: "sample_backend_standards.md (Page 1) • Section 1: 'Git Branching & PR Guidelines'"
+      },
+      {
+        q: "🚀 What should a new employee complete during their first 3 days of onboarding?",
+        a: "Key onboarding milestones:<ul style='margin-left: 20px; margin-top: 6px;'><li><strong>Day 1:</strong> Attend HR welcome orientation at 10:00 AM, complete corporate email and 1Password vault invite, join primary Slack channels.</li><li><strong>Day 2:</strong> 1-on-1 walkthrough with Onboarding Buddy, review Vacation Policy, clone repos and set up Docker.</li><li><strong>Day 3:</strong> Access JIRA board, submit your first 'good first issue' PR to verify CI/CD.</li></ul>",
+        c: "sample_employee_onboarding.md (Page 1) • Section 2: 'First Week Checklist'"
+      },
+      {
+        q: "🔐 What are the mandatory rules for Two-Factor Authentication (2FA) and password security?",
+        a: "<strong>Two-Factor Authentication (2FA) is mandatory</strong> across all corporate accounts (Google Workspace, GitHub, Slack, AWS).<br /><br />Rules:<ul style='margin-left: 20px; margin-top: 6px;'><li>Hardware keys (YubiKey) or TOTP apps (1Password, Google Authenticator) are required. <strong>SMS-based 2FA is strictly disallowed.</strong></li><li>Passwords must be minimum 16 characters, auto-generated and stored in the 1Password team vault.</li><li>Screen lock must automatically activate after 5 minutes of inactivity.</li></ul>",
+        c: "sample_it_security_policy.md (Page 1) • Section 2: 'Authentication & Password Standards'"
+      }
+    ];
+
+    function loadPrompt(idx) {
+      document.querySelectorAll('.demo-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      const data = DEMO_DATA[idx];
+      document.getElementById('userQuestion').innerHTML = data.q;
+      document.getElementById('aiAnswer').innerHTML = data.a;
+      document.getElementById('citationBox').innerHTML = '📎 <span class="citation-tag">Verified Source:</span> ' + data.c;
+    }
+
+    const TABS = [
+      {
+        title: "Terminal — One-Line Auto Installer",
+        code: `# Run in macOS terminal:
+curl -fsSL https://raw.githubusercontent.com/Farhodoff/company-knowledge-base-rag/main/install.sh | bash
+
+# What this installer does:
+# 1. Sets up ~/.company-rag with isolated virtual environment
+# 2. Creates global 'company-rag' CLI in ~/.local/bin
+# 3. Builds native 'Company Knowledge Base.app' in ~/Applications
+# 4. Indexes default sample documents automatically!`
+      },
+      {
+        title: "Terminal — Global CLI Commands",
+        code: `# Ask questions directly from your terminal:
+company-rag ask "What is the vacation policy?"
+
+# Launch the Streamlit web dashboard:
+company-rag ui
+
+# Add a new company policy and re-index:
+company-rag add ~/Downloads/new_health_benefits.pdf
+
+# Open documents folder in Finder:
+company-rag docs`
+      },
+      {
+        title: "macOS — Spotlight & Native App",
+        code: `# The installer automatically registers:
+# ~/Applications/Company Knowledge Base.app
+
+# To launch:
+# 1. Press Cmd + Space (Spotlight)
+# 2. Type "Company Knowledge Base"
+# 3. Hit Enter!
+# The app opens the web cockpit directly in your default browser.`
+      },
+      {
+        title: "Manual Setup — uv / standard venv",
+        code: `# 1. Clone repo
+git clone https://github.com/Farhodoff/company-knowledge-base-rag.git
+cd company-knowledge-base-rag
+
+# 2. Install dependencies via uv
+uv venv && uv pip install -r requirements.txt
+
+# 3. Set API key
+cp .env.example .env  # Add GOOGLE_API_KEY=...
+
+# 4. Ingest & Run
+python scripts/ingest.py
+streamlit run app.py`
+      }
+    ];
+
+    function switchTab(idx) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      document.getElementById('tabTitle').innerText = TABS[idx].title;
+      document.getElementById('tabContent').innerText = TABS[idx].code;
+    }
+  </script>
+</body>
+</html>
