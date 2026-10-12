@@ -4,14 +4,19 @@
 
 **Enterprise-grade AI Assistant grounded in internal company policies, handbooks, and engineering guidelines.**
 
+<p align="center">
+  <img src="assets/rag_hero_banner.png" alt="Company Knowledge Base RAG Banner" width="100%" style="border-radius: 12px;" />
+</p>
+
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-v0.2+-1C3C3C.svg?style=flat)](https://www.langchain.com/)
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-text--embedding--004-4285F4.svg?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
 [![FAISS](https://img.shields.io/badge/Vector%20Store-FAISS-008080.svg?style=flat)](https://github.com/facebookresearch/faiss)
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Slack & Discord](https://img.shields.io/badge/Integrations-Slack%20%7C%20Discord-4A154B.svg?style=flat&logo=slack&logoColor=white)](docs/INTEGRATIONS.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Features](#-key-features) • [Architecture](#-system-architecture) • [Quick Start](#-quick-start) • [Web UI](#-streamlit-chat-ui) • [CLI Testing](#-cli-query-tool) • [Configuration](#%EF%B8%8F-configuration) • [Tests](#-testing)
+[Features](#-key-features) • [Architecture](#-system-architecture) • [Quick Start](#-quick-start) • [Integrations](#-slack--discord-integrations) • [Web UI](#-streamlit-chat-ui) • [CLI Testing](#-cli-query-tool) • [Configuration](#%EF%B8%8F-configuration) • [Tests](#-testing)
 
 </div>
 
@@ -31,6 +36,7 @@ Employees can ask natural language questions regarding vacation policies, engine
 - **Accurate Grounding & Citations:** Every answer cites source files, page numbers, and collapsible text excerpts.
 - **Strict Anti-Hallucination Guardrails:** If information is missing from documents, the AI explicitly states it cannot find it rather than fabricating facts.
 - **In-Browser Document Upload & Re-indexing:** Drag & drop new documents in the Streamlit sidebar and re-index with a single click.
+- **Slack & Discord Bot Connectors:** Answer employee queries directly in company Slack channels or Discord servers.
 - **Flexible Retrieval Strategies:** Choose between standard **Cosine Similarity** and **MMR (Maximal Marginal Relevance)** to avoid redundant chunks.
 - **CLI Query Tool:** Headless command-line interface (`scripts/query.py`) for automated pipelines, cron tasks, and terminal workflows.
 - **Local-First Privacy:** Vector embeddings are stored locally via FAISS (`vectorstore/`), protecting company data boundaries.
@@ -38,6 +44,10 @@ Employees can ask natural language questions regarding vacation policies, engine
 ---
 
 ## 🏛️ System Architecture
+
+<p align="center">
+  <img src="assets/rag_architecture_diagram.png" alt="Company Knowledge Base RAG Architecture Diagram" width="100%" style="border-radius: 12px;" />
+</p>
 
 ```mermaid
 flowchart LR
@@ -106,6 +116,36 @@ python scripts/ingest.py
 streamlit run app.py
 ```
 Open `http://localhost:8501` in your browser.
+
+---
+
+## 💬 Slack & Discord Integrations
+
+Connect the knowledge base directly to your team's workspace:
+
+### 1. Slack Bot (Socket Mode)
+Run a secure bot responding to `@KnowledgeBot` mentions or channel threads:
+```bash
+# Add SLACK_BOT_TOKEN and SLACK_APP_TOKEN in .env
+python src/integrations/slack_bot.py
+```
+
+### 2. Discord Bot
+Answer queries directly in Discord developer channels:
+```bash
+# Add DISCORD_BOT_TOKEN in .env
+python src/integrations/discord_bot.py
+# Then in any channel: !ask "What are our coding standards?"
+```
+
+### 3. Universal REST Webhook
+Expose a lightweight HTTP API endpoint for internal portals, Zapier, or intranet bots:
+```bash
+python src/integrations/webhook_server.py --port 8000
+# POST http://localhost:8000/api/v1/query with {"question": "..."}
+```
+
+*For complete step-by-step setup details, see the [Integrations Guide](docs/INTEGRATIONS.md).*
 
 ---
 

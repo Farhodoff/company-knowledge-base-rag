@@ -1,0 +1,48 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+/Title (Engineering Architecture \046 Reliability Standards)
+/Author (Platform Engineering Team)
+/Subject (Guidelines on microservices\054 retry policies\054 circuit breakers\054 and zero\055downtime deployments\056)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 1
+/Kids [ 4 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/MediaBox [ 0.0 0.0 612 792 ]
+/Parent 2 0 R
+>>
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000015 00000 n 
+0000000271 00000 n 
+0000000330 00000 n 
+0000000379 00000 n 
+trailer
+<<
+/Size 5
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+473
+%%EOF

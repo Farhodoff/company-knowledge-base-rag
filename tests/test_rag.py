@@ -57,6 +57,17 @@ def test_load_documents_from_directory():
     assert "sample_backend_standards.md" in filenames
 
 
+def test_load_sample_pdf():
+    """Verify loading real sample PDF document with page and metadata tracking."""
+    pdf_path = DOCUMENTS_DIR / "sample_engineering_handbook.pdf"
+    assert pdf_path.exists()
+    docs = load_document(pdf_path)
+    assert len(docs) >= 1
+    assert docs[0].metadata["extension"] == ".pdf"
+    assert docs[0].metadata["filename"] == "sample_engineering_handbook.pdf"
+    assert docs[0].metadata["page"] == 1
+
+
 def test_format_docs_citation():
     """Verify format_docs builds clear markdown source blocks."""
     docs = [
