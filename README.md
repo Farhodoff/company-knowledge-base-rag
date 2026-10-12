@@ -10,13 +10,14 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-v0.2+-1C3C3C.svg?style=flat)](https://www.langchain.com/)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-text--embedding--004-4285F4.svg?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
-[![FAISS](https://img.shields.io/badge/Vector%20Store-FAISS-008080.svg?style=flat)](https://github.com/facebookresearch/faiss)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-gemini--2.5--flash-4285F4.svg?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
+[![FAISS](https://img.shields.io/badge/Vector%20Store-FAISS%203072d-008080.svg?style=flat)](https://github.com/facebookresearch/faiss)
+[![Bilingual](https://img.shields.io/badge/Languages-🇺🇿%20Uzbek%20%7C%20🇬🇧%20English-blue.svg)](#-bilingual-support)
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Slack & Discord](https://img.shields.io/badge/Integrations-Slack%20%7C%20Discord-4A154B.svg?style=flat&logo=slack&logoColor=white)](docs/INTEGRATIONS.md)
+[![macOS CLI](https://img.shields.io/badge/macOS-1--Line%20Installer-black.svg?style=flat&logo=apple&logoColor=white)](install.sh)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Features](#-key-features) • [Architecture](#-system-architecture) • [Quick Start](#-quick-start) • [Integrations](#-slack--discord-integrations) • [Web UI](#-streamlit-chat-ui) • [CLI Testing](#-cli-query-tool) • [Configuration](#%EF%B8%8F-configuration) • [Tests](#-testing)
+[🌐 Live Website](https://farhodoff.github.io/company-knowledge-base-rag/) • [📖 O‘zbekcha Qo‘llanma](docs/QOLLANMA_UZ.md) • [📘 English Guide](docs/USER_GUIDE.md) • [Features](#-key-features) • [Architecture](#-system-architecture) • [Quick Start](#-quick-start) • [Integrations](#-slack--discord-integrations)
 
 </div>
 
