@@ -1,0 +1,41 @@
+name: "🐛 Bug Report (Xatolik Hisoboti)"
+description: "RAG pipeline, hujjatlar indekslash yoki chatbot xatolarini bildirish"
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Xatolik Tavsifi (Description)
+      description: Muammoni qisqacha bayon qiling.
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Aloqador Qatlam
+      options:
+        - Document Ingestion (PDF / DOCX / TXT / MD)
+        - Vector Indexing & Embeddings (FAISS / Gemini Embeddings)
+        - RAG Retrieval & Prompt Generation
+        - Streamlit Web Dashboard
+        - Slack / Discord Integrations
+        - Local macOS Native Desktop Wrapper
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Qayta Tiklash Qadamlari
+      placeholder: |
+        1. Hujjatni yuklang: [...]
+        2. Savol bering: [...]
+        3. Olingan xatolik: [...]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Terminal yoki Python Xatolik Loglari (Traceback)
+      render: shell

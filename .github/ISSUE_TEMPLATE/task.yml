@@ -1,0 +1,19 @@
+name: "🛠️ Task / Maintenance"
+description: "RAG arxitekturasi, testlar, qidiruv aniqligi yoki hujjatlashtirish vazifasi"
+title: "[Task]: "
+labels: ["task"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Vazifa Maqsadi
+      description: Qanday texnik ish bajarilishi kerak?
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Qabul Qilish Mezonlari
+      value: |
+        - [ ] Python kod va testlar to'liq o'tdi (`pytest`)
+        - [ ] Hujjatlar indeksi to'g'ri ishlayapti

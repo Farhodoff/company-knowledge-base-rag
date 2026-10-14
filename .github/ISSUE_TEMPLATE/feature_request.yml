@@ -1,0 +1,19 @@
+name: "🚀 Feature Request (Yangi Imkoniyat)"
+description: "RAG tizimiga yangi fayl formati, AI model yoki integratsiya taklif qilish"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Ehtiyoj yoki Muammo
+      description: Qanday yangi imkoniyat yoki integratsiya tizimni yaxshilaydi?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Taklif Qilinayotgan Yechim
+      description: Yangi imkoniyat qanday ishlashi kerak?
+    validations:
+      required: true
