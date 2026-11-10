@@ -88,3 +88,17 @@ def test_cli_mock_query_execution():
     assert result.returncode == 0
     assert "MOCK MODE" in result.stdout
     assert "sample_vacation_policy.md" in result.stdout
+
+
+def test_hybrid_retriever_interface():
+    """Verify hybrid retriever factory handles VectorStore and fallback logic."""
+    from unittest.mock import MagicMock
+    from src.retriever import get_hybrid_retriever
+
+    mock_vs = MagicMock()
+    mock_vs.as_retriever.return_value = MagicMock()
+
+    retriever = get_hybrid_retriever(mock_vs, documents=[], top_k=3)
+    assert retriever is not None
+    mock_vs.as_retriever.assert_called_once()
+
